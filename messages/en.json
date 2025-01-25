@@ -1,0 +1,26 @@
+{
+  "title": "Hello world!",
+  "about": "Go to the about page",
+  "Register": "Register",
+  "BookShelf": {
+    "Register": "Register - BookShelf",
+    "Home": "Home - BookShelf"
+  },
+  "LogoImageAlt": "Logo Image",
+  "RegisterTitle": "Register",
+  "UsernameLabel": "Username",
+  "EmailLabel": "Email",
+  "PasswordLabel": "Password",
+  "CurrentPasswordLabel": "Password Current",
+  "RegisterButtonText": "Register",
+  "I have accepted the ": "I have accepted the ",
+  "Term and Condition": "Terms and Conditions",
+  "Username is required": "Username is required",
+  "Email is required": "Email is required",
+  "Email is not valid": "Email is not valid",
+  "Password is required": "Password is required",
+  "Password must be at least 6 characters long": "Password must be at least 6 characters long",
+  "Password must contain at least one number": "Password must contain at least one number",
+  "Current Password is required": "Current Password is required",
+  "You must accept the terms and conditions": "You must accept the terms and conditions"
+}
