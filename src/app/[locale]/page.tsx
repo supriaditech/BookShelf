@@ -1,11 +1,29 @@
-import Image from "next/image";
+import MasterLayout from '@/components/Layout/MasterLayout';
+import ThemeToggle from '@/components/Theme/ThemeToggle';
+import { GetStaticProps, Metadata } from 'next';
+import { useTranslations } from 'next-intl';
+import { getTranslations } from 'next-intl/server';
+import Image from 'next/image';
 
-export default function Home() {
+export async function generateMetadata({
+  params: { locale },
+}: Omit<any, 'children'>) {
+  const t = await getTranslations({ locale, namespace: 'BookShelf' });
+
+  return {
+    title: t('Home'),
+  };
+}
+
+export default async function Home() {
+  // const t = useTranslations();
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
+    <MasterLayout title="Home page">
       <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
+        <ThemeToggle />
+
         <Image
-          className="dark:invert"
+          className="dark:invert w-auto h-auto aspect-auto"
           src="https://nextjs.org/icons/next.svg"
           alt="Next.js logo"
           width={180}
@@ -14,7 +32,7 @@ export default function Home() {
         />
         <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
           <li className="mb-2">
-            Get started by editing{" "}
+            {/* {t('title')} */}
             <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
               src/app/page.tsx
             </code>
@@ -30,13 +48,6 @@ export default function Home() {
             target="_blank"
             rel="noopener noreferrer"
           >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
             Deploy now
           </a>
           <a
@@ -96,6 +107,6 @@ export default function Home() {
           Go to nextjs.org →
         </a>
       </footer>
-    </div>
+    </MasterLayout>
   );
 }

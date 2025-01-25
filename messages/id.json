@@ -1,0 +1,26 @@
+{
+  "title": "haloooooo",
+  "about": "Go to the about page",
+  "Register": "Daftar Akun",
+  "BookShelf": {
+    "Register": "Daftar Akun - BookShelf",
+    "Home": "Beranda -- BookShelf"
+  },
+  "LogoImageAlt": "Gambar Logo",
+  "RegisterTitle": "Daftar",
+  "UsernameLabel": "Nama Pengguna",
+  "EmailLabel": "Email",
+  "PasswordLabel": "Kata Sandi",
+  "CurrentPasswordLabel": "Kata Sandi Saat Ini",
+  "RegisterButtonText": "Daftar",
+  "I have accepted the ": "Saya telah menerima ",
+  "Term and Condition": "Syarat dan Ketentuan",
+  "Username is required": "Nama pengguna diperlukan",
+  "Email is required": "Email diperlukan",
+  "Email is not valid": "Email tidak valid",
+  "Password is required": "Kata sandi diperlukan",
+  "Password must be at least 6 characters long": "Kata sandi harus terdiri dari minimal 6 karakter",
+  "Password must contain at least one number": "Kata sandi harus mengandung setidaknya satu angka",
+  "Current Password is required": "Kata sandi saat ini diperlukan",
+  "You must accept the terms and conditions": "Anda harus menerima syarat dan ketentuan"
+}
