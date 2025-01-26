@@ -6,7 +6,6 @@ import { usePathname, useRouter } from '@/i18n/routing';
 export default function LanguageSwitcher() {
   const pathname = usePathname();
   const router = useRouter();
-
   const changeLanguage = (locale: string) => {
     router.replace(pathname, { locale });
   };

@@ -6,14 +6,17 @@ import React from 'react';
 import { useTranslations } from 'next-intl';
 import { useTheme } from '@/context/ThemeContext';
 import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa';
-import { Router } from 'next/router';
-import { useRouter } from '@/i18n/routing';
 import useAuth from '@/hooks/useAuth';
+import { useRouter } from '@/i18n/routing';
 
-function FormLogin() {
-  const router = useRouter();
-  const t = useTranslations(); // Assuming 'Register' is the namespace
+type FormLoginProps = {
+  locale: string; // Menerima locale sebagai props
+};
+
+function FormLogin({ locale }: FormLoginProps) {
+  const t = useTranslations();
   const { theme } = useTheme();
+  const router = useRouter();
   const {
     handlerLogin,
     handleSubmit,
@@ -21,8 +24,7 @@ function FormLogin() {
     errors,
     nextUrl,
     loadingLogin,
-  } = useAuth();
-
+  } = useAuth(locale ?? 'en');
   React.useEffect(() => {
     if (nextUrl) {
       router.replace(nextUrl);
@@ -122,7 +124,7 @@ function FormLogin() {
           className="bg-toscaDark flex flex-row justify-center items-center gap-2"
         >
           {loadingLogin && <Spinner className="h-4 w-4" />}
-          <p className="font-bold text-md">{t('RegisterButtonText')}</p>
+          <p className="font-bold text-md">{t('Login')}</p>
         </Button>
       </form>
     </div>

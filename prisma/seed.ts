@@ -35,8 +35,6 @@ async function main() {
       update_At: new Date(),
     },
   });
-
-  console.log({ admin, user });
 }
 
 main()

@@ -9,13 +9,19 @@ import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa';
 import useAuth from '@/hooks/useAuth';
 import { useRouter } from '@/i18n/routing';
 
-function FormRegister() {
+type FormRegisterProps = {
+  locale: string; // Menerima locale sebagai props
+};
+
+function FormRegister({ locale }: FormRegisterProps) {
   const t = useTranslations(); // Assuming 'Register' is the namespace
   const { theme } = useTheme();
-  const { handleRegister, handleSubmit, register, errors, nextUrl } = useAuth();
+  const router = useRouter() as any;
+
+  const { handleRegister, handleSubmit, register, errors, nextUrl } =
+    useAuth(locale);
   const [showpassword, setShowPassword] = React.useState(false);
   const [showpasswordCurrent, setShowPasswordCurrent] = React.useState(false);
-  const router = useRouter();
   React.useEffect(() => {
     if (nextUrl) {
       router.replace(nextUrl);
@@ -31,7 +37,7 @@ function FormRegister() {
         src="/images/logo/logo.png" // Ensure this path is correct
         width={128}
         height={100}
-        className="w-20 sm:w-32 h-auto" // Use h-auto to maintain aspect ratio
+        className="w-24 sm:w-32 h-auto" // Use h-auto to maintain aspect ratio
         alt={t('LogoImageAlt')} // Translate the alt text
       />
       <h1 className="text-3xl sm:text-5xl font-bold text-gray-800 mb-10">

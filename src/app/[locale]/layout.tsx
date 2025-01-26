@@ -6,9 +6,9 @@ import { routing } from '@/i18n/routing';
 import { notFound } from 'next/navigation';
 import { getMessages } from 'next-intl/server';
 import { NextIntlClientProvider } from 'next-intl';
-import { Slide, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Providers from '@/components/Layout/ProgressBarProvider';
+import { getSession, SessionProvider } from 'next-auth/react';
 
 const geistSans = localFont({
   src: '../fonts/GeistMonoVF.woff',
@@ -35,7 +35,7 @@ export default async function RootLayout({
   if (!routing.locales.includes(locale as any)) {
     notFound();
   }
-
+  const session = await getSession();
   // Enable static rendering
   // setRequestLocale(locale);
   const messages = await getMessages();
@@ -44,7 +44,7 @@ export default async function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <ThemeProviderNext>
+        <ThemeProviderNext session={session}>
           <Providers>
             <NextIntlClientProvider messages={messages}>
               {children}

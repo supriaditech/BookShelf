@@ -2,9 +2,10 @@
 import { useForm, SubmitHandler } from 'react-hook-form';
 import Api from '../../service/api';
 import React from 'react';
-import { signIn } from 'next-auth/react';
+import { signIn, signOut } from 'next-auth/react';
 import { toast } from 'react-toastify';
 import { destroyCookie, parseCookies } from 'nookies';
+import { useRouter } from 'next/router';
 interface AuthFormInputs {
   username: string;
   email: string;
@@ -14,7 +15,7 @@ interface AuthFormInputs {
   name: string;
 }
 
-const useAuth = () => {
+const useAuth = (locale: string) => {
   const {
     register,
     handleSubmit,
@@ -23,7 +24,6 @@ const useAuth = () => {
   } = useForm<AuthFormInputs>();
   const [loadingLogin, setLoadingLogin] = React.useState<boolean>(false);
   const [nextUrl, setNextUrl] = React.useState<string | any>(null);
-
   const handleRegister: SubmitHandler<AuthFormInputs> = async (data) => {
     const id = toast.loading('Registering your account...');
     // Validasi untuk memastikan passwordCurrent sama dengan password
@@ -45,7 +45,6 @@ const useAuth = () => {
 
     try {
       const response = await api.call('POST');
-      console.log('========', response);
       if (response.meta.statusCode === 201) {
         toast.update(id, {
           render: (
@@ -94,7 +93,7 @@ const useAuth = () => {
       // Cek apakah login berhasil
       if (signInResponse.ok && signInResponse.status === 200) {
         const cookies = parseCookies();
-        let nextUrl = '/';
+        let nextUrl = `/${locale}`; // Set default nextUrl dengan locale
 
         if (cookies.nextSession) {
           const nextSessionObj = JSON.parse(cookies.nextSession);
@@ -112,23 +111,76 @@ const useAuth = () => {
             nextUrl = String(signInResponse.url);
           }
         }
+
+        // Pastikan nextUrl mengandung locale
+        if (!nextUrl.startsWith(`/${locale}`)) {
+          nextUrl = `${nextUrl}${locale}`; // Tambahkan locale jika belum ada
+        }
+
         setNextUrl(nextUrl);
         toast.success('Login successful!', { autoClose: 3000 });
       } else {
-        console.error('Login failed:', signInResponse.error); // Logging error pada signIn
+        console.error('Login failed:', signInResponse.error);
         throw new Error(signInResponse.error || 'Login failed');
       }
     } catch (error) {
-      console.error('Error during login:', error); // Logging error yang ditangkap
+      console.error('Error during login:', error);
       toast.error(
         'Login failed, Silahkan masukan user id dan password yang benar',
         {
           autoClose: 3000,
         },
       );
-      setLoadingLogin(false);
+    } finally {
+      setLoadingLogin(false); // Pastikan loading diatur ke false di akhir
     }
   };
+
+  const handleLogout = async (token: string) => {
+    const id = toast.loading('Logout your account...');
+
+    const api = new Api('/api/auth/logout', true, 'json');
+    api.token = token;
+    try {
+      const response = await api.call('POST');
+      if (response.meta.statusCode === 200) {
+        toast.update(id, {
+          render: <p className="text-base font-bold">Your account logout.</p>,
+          type: 'success',
+          autoClose: 3000,
+          isLoading: false,
+        });
+
+        setTimeout(async () => {
+          toast.update(id, {
+            render: <p className="text-base font-bold">Redirect Page Login</p>,
+            type: 'success',
+            autoClose: 3000,
+            isLoading: false,
+          });
+        });
+        signOut({ callbackUrl: '/' });
+      } else
+        toast.update(id, {
+          render: (
+            <p className="text-base font-bold">
+              `Logout failed ${response.meta.message}`
+            </p>
+          ),
+          type: 'error',
+          autoClose: 3000,
+          isLoading: false,
+        });
+    } catch (error) {
+      toast.update(id, {
+        render: <p className="text-base font-bold">`Logout failed `</p>,
+        type: 'error',
+        autoClose: 3000,
+        isLoading: false,
+      });
+    }
+  };
+
   return {
     handleRegister,
     handleSubmit,
@@ -137,6 +189,7 @@ const useAuth = () => {
     errors,
     nextUrl,
     loadingLogin,
+    handleLogout,
   };
 };
 
