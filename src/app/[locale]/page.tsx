@@ -1,8 +1,7 @@
 import MasterLayout from '@/components/Layout/MasterLayout';
 import ThemeToggle from '@/components/Theme/ThemeToggle';
-import { GetStaticProps, Metadata } from 'next';
-import { useTranslations } from 'next-intl';
-import { getTranslations } from 'next-intl/server';
+import { getSession, useSession } from 'next-auth/react';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
 import Image from 'next/image';
 
 export async function generateMetadata({
@@ -14,11 +13,14 @@ export async function generateMetadata({
     title: t('Home'),
   };
 }
+type Props = {
+  params: { locale: string };
+};
 
-export default async function Home() {
-  // const t = useTranslations();
+export default async function Home({ params: { locale } }: Props) {
+  setRequestLocale(locale);
   return (
-    <MasterLayout >
+    <MasterLayout locale={locale}>
       <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
         <ThemeToggle />
 

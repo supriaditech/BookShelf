@@ -10,6 +10,8 @@ import {
 } from 'react';
 import { Slide, ToastContainer } from 'react-toastify';
 import { PagesProgressBar as ProgressBar } from 'next-nprogress-bar';
+import { SessionProvider } from 'next-auth/react';
+import { Session } from 'next-auth';
 
 type ThemeContextType = {
   theme: string;
@@ -27,10 +29,14 @@ export const useTheme = () => {
 };
 
 type ThemeProviderProps = {
+  session: Session | null;
   children: ReactNode; // Menentukan tipe untuk children
 };
 
-export const ThemeProviderNext = ({ children }: ThemeProviderProps) => {
+export const ThemeProviderNext = ({
+  session,
+  children,
+}: ThemeProviderProps) => {
   const [theme, setTheme] = useState<string>('light');
 
   useEffect(() => {
@@ -50,14 +56,16 @@ export const ThemeProviderNext = ({ children }: ThemeProviderProps) => {
   };
 
   return (
-    <ThemeContext.Provider value={{ theme, toggleTheme }}>
-      <ToastContainer
-        theme="colored"
-        transition={Slide}
-        position="top-center"
-      />
+    <SessionProvider session={session}>
+      <ThemeContext.Provider value={{ theme, toggleTheme }}>
+        <ToastContainer
+          theme="colored"
+          transition={Slide}
+          position="top-center"
+        />
 
-      <ThemeProvider>{children}</ThemeProvider>
-    </ThemeContext.Provider>
+        <ThemeProvider>{children}</ThemeProvider>
+      </ThemeContext.Provider>
+    </SessionProvider>
   );
 };
