@@ -1,6 +1,7 @@
 // src/utils/api.ts
 import axios, { AxiosRequestConfig } from 'axios';
 import { ApiUrl } from '../config/config';
+import { toast } from 'react-toastify';
 
 class Api {
   public url: string = '';
@@ -34,7 +35,6 @@ class Api {
   public call = async (method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH') => {
     const url = ApiUrl + this.url;
 
-    // Mengatur konfigurasi permintaan
     const config: AxiosRequestConfig | any = {
       method,
       url,
@@ -46,7 +46,6 @@ class Api {
       },
     };
 
-    // Set body sesuai dengan tipe request
     if (this.type === 'json') {
       config.headers['Content-Type'] = 'application/json';
       config.data = JSON.stringify(this.body);
@@ -58,20 +57,26 @@ class Api {
       for (const key in this.body) {
         formData.append(key, this.body[key]);
       }
-      config.data = formData; // Menggunakan FormData untuk multipart
+      config.data = formData;
     }
 
     try {
       const response = await axios(config);
-      return response.data; // Mengembalikan data dari respons
+      return response.data; // Mengembalikan data dari respons tanpa mengubah struktur
     } catch (error) {
+      // Jika terjadi kesalahan, kembalikan respons kesalahan asli
       if (axios.isAxiosError(error) && error.response) {
-        // Jika ada respons dari server
-        console.error('API call error:', error.response.data);
-        throw new Error(error.response.data.message || 'Something went wrong');
+        // Mengembalikan respons kesalahan tanpa mengubah strukturnya
+        return error.response.data; // Mengembalikan data kesalahan asli
       } else {
-        console.error('API call error:', error);
-        throw new Error('Network error or request failed');
+        // Jika kesalahan jaringan, kembalikan objek kesalahan generik
+        return {
+          meta: {
+            message: 'Kesalahan jaringan atau permintaan gagal',
+            statusCode: 500,
+          },
+          data: null,
+        };
       }
     }
   };

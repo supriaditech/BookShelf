@@ -6,7 +6,9 @@ import { routing } from '@/i18n/routing';
 import { notFound } from 'next/navigation';
 import { getMessages } from 'next-intl/server';
 import { NextIntlClientProvider } from 'next-intl';
-import { ThemeProvider } from '@material-tailwind/react';
+import { Slide, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import Providers from '@/components/Layout/ProgressBarProvider';
 
 const geistSans = localFont({
   src: '../fonts/GeistMonoVF.woff',
@@ -42,11 +44,12 @@ export default async function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {' '}
         <ThemeProviderNext>
-          <NextIntlClientProvider messages={messages}>
-            {children}
-          </NextIntlClientProvider>
+          <Providers>
+            <NextIntlClientProvider messages={messages}>
+              {children}
+            </NextIntlClientProvider>
+          </Providers>
         </ThemeProviderNext>
       </body>
     </html>

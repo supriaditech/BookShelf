@@ -4,7 +4,8 @@
   "Register": "Daftar Akun",
   "BookShelf": {
     "Register": "Daftar Akun - BookShelf",
-    "Home": "Beranda -- BookShelf"
+    "Home": "Beranda - BookShelf",
+    "Login": "Masuk - BookShelf"
   },
   "LogoImageAlt": "Gambar Logo",
   "RegisterTitle": "Daftar",
@@ -22,5 +23,8 @@
   "Password must be at least 6 characters long": "Kata sandi harus terdiri dari minimal 6 karakter",
   "Password must contain at least one number": "Kata sandi harus mengandung setidaknya satu angka",
   "Current Password is required": "Kata sandi saat ini diperlukan",
-  "You must accept the terms and conditions": "Anda harus menerima syarat dan ketentuan"
+  "You must accept the terms and conditions": "Anda harus menerima syarat dan ketentuan",
+  "Name is required": "Nama diperlukan",
+  "Name": "Nama",
+  "Login": "Masuk"
 }

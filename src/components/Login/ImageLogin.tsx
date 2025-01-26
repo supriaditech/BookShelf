@@ -3,7 +3,7 @@ import { useTheme } from '@/context/ThemeContext';
 import Image from 'next/image';
 import React from 'react';
 
-function ImageRegister() {
+function ImageLogin() {
   const { theme } = useTheme();
 
   return (
@@ -14,14 +14,14 @@ function ImageRegister() {
     >
       <Image
         className="dark:invert w-80 h-auto aspect-auto"
-        src="/images/AssetRegister.png"
-        alt="Register Image"
+        src="/images/AssetLogin.png"
+        alt="Login Image"
         width={180}
         height={38}
-        priority
+        // priority
       />
     </div>
   );
 }
 
-export default ImageRegister;
+export default ImageLogin;
