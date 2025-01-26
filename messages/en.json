@@ -4,7 +4,8 @@
   "Register": "Register",
   "BookShelf": {
     "Register": "Register - BookShelf",
-    "Home": "Home - BookShelf"
+    "Home": "Home - BookShelf",
+    "Login": "Login - BookShelf"
   },
   "LogoImageAlt": "Logo Image",
   "RegisterTitle": "Register",
@@ -22,5 +23,8 @@
   "Password must be at least 6 characters long": "Password must be at least 6 characters long",
   "Password must contain at least one number": "Password must contain at least one number",
   "Current Password is required": "Current Password is required",
-  "You must accept the terms and conditions": "You must accept the terms and conditions"
+  "You must accept the terms and conditions": "You must accept the terms and conditions",
+  "Name is required": "Name is required",
+  "Name": "Name",
+  "Login": "Login"
 }

@@ -8,6 +8,8 @@ import {
   useEffect,
   ReactNode,
 } from 'react';
+import { Slide, ToastContainer } from 'react-toastify';
+import { PagesProgressBar as ProgressBar } from 'next-nprogress-bar';
 
 type ThemeContextType = {
   theme: string;
@@ -49,6 +51,12 @@ export const ThemeProviderNext = ({ children }: ThemeProviderProps) => {
 
   return (
     <ThemeContext.Provider value={{ theme, toggleTheme }}>
+      <ToastContainer
+        theme="colored"
+        transition={Slide}
+        position="top-center"
+      />
+
       <ThemeProvider>{children}</ThemeProvider>
     </ThemeContext.Provider>
   );

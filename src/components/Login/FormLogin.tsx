@@ -1,60 +1,56 @@
 // src/app/register/FormRegister.tsx
 'use client';
-import { Button, Checkbox, Input } from '@material-tailwind/react';
+import { Button, Checkbox, Input, Spinner } from '@material-tailwind/react';
 import Image from 'next/image';
 import React from 'react';
 import { useTranslations } from 'next-intl';
 import { useTheme } from '@/context/ThemeContext';
 import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa';
-import useAuth from '@/hooks/useAuth';
+import { Router } from 'next/router';
 import { useRouter } from '@/i18n/routing';
+import useAuth from '@/hooks/useAuth';
 
-function FormRegister() {
+function FormLogin() {
+  const router = useRouter();
   const t = useTranslations(); // Assuming 'Register' is the namespace
   const { theme } = useTheme();
-  const { handleRegister, handleSubmit, register, errors, nextUrl } = useAuth();
-  const [showpassword, setShowPassword] = React.useState(false);
-  const [showpasswordCurrent, setShowPasswordCurrent] = React.useState(false);
-  const router = useRouter();
+  const {
+    handlerLogin,
+    handleSubmit,
+    register,
+    errors,
+    nextUrl,
+    loadingLogin,
+  } = useAuth();
+
   React.useEffect(() => {
     if (nextUrl) {
       router.replace(nextUrl);
     }
   }, [nextUrl]);
+
+  const [showpassword, setShowPassword] = React.useState(false);
   return (
     <div
-      className={`w-full h-full flex flex-col justify-center px-4 py-10 sm:p-20 ${
+      className={`w-full h-full flex flex-col justify-center  px-4 py-10 sm:p-20 ${
         theme === 'dark' ? 'bg-toscaSoft' : 'bg-white'
       }`}
     >
       <Image
         src="/images/logo/logo.png" // Ensure this path is correct
-        width={128}
-        height={100}
-        className="w-20 sm:w-32 h-auto" // Use h-auto to maintain aspect ratio
+        width={128} // Set to the actual width of the image
+        height={100} // Set to the actual height of the image
+        className="w-24 sm:w-32  h-auto" // Use h-auto to maintain aspect ratio
         alt={t('LogoImageAlt')} // Translate the alt text
       />
       <h1 className="text-3xl sm:text-5xl font-bold text-gray-800 mb-10">
-        {t('RegisterTitle')}
+        {t('Login')}
       </h1>
       <form
-        onSubmit={handleSubmit(handleRegister)} // Hubungkan handleSubmit dan onSubmit dari react-hook-form
+        onSubmit={handleSubmit(handlerLogin)} // Hubungkan handleSubmit dan onSubmit dari react-hook-form
         className="flex flex-col gap-2"
       >
         <div className="px-3 flex flex-col gap-6">
-          <Input
-            crossOrigin={undefined}
-            {...register('username', { required: t('Username is required') })}
-            label={t('UsernameLabel')}
-            className="w-full"
-            error={!!errors.username} // Menampilkan error jika ada
-          />
-          {errors.username && (
-            <p className="text-red-500 text-xs -mt-5">
-              {errors.username.message}
-            </p>
-          )}
-
           <Input
             crossOrigin={undefined}
             {...register('email', {
@@ -69,18 +65,6 @@ function FormRegister() {
           />
           {errors.email && (
             <p className="text-red-500 text-xs -mt-5">{errors.email.message}</p>
-          )}
-
-          <Input
-            crossOrigin={undefined}
-            {...register('name', {
-              required: t('Name is required'),
-            })}
-            label={t('Name')}
-            error={!!errors.email} // Menampilkan error jika ada
-          />
-          {errors.name && (
-            <p className="text-red-500 text-xs -mt-5">{errors.name.message}</p>
           )}
 
           <div className="relative">
@@ -114,29 +98,8 @@ function FormRegister() {
               {errors.password.message}
             </p>
           )}
-          <div className="relative">
-            <Input
-              crossOrigin={undefined}
-              {...register('passwordCurrent', {
-                required: t('Current Password is required'),
-              })}
-              label={t('CurrentPasswordLabel')}
-              type={showpasswordCurrent ? 'text' : 'password'}
-            />
-            <div
-              className="absolute right-4 top-3 hover:text-toscaSoft"
-              onClick={() => setShowPasswordCurrent(!showpasswordCurrent)}
-            >
-              {showpasswordCurrent ? <FaRegEye /> : <FaRegEyeSlash />}
-            </div>
-          </div>
-          {errors.passwordCurrent && (
-            <p className="text-red-500 text-xs -mt-5">
-              {errors.passwordCurrent.message}
-            </p>
-          )}
         </div>
-        <div className="flex flex-row gap-1 sm:gap-2 items-center text-xs md:text-sm text-gray-700">
+        <div className="flex flex-row gap-1 sm:gap-2 items-center text-sm text-gray-700">
           <Checkbox
             crossOrigin={undefined}
             {...register('checkBox', {
@@ -144,7 +107,6 @@ function FormRegister() {
             })}
             defaultChecked
           />
-
           <p>{t('I have accepted the ')}</p>
           <span className="text-xs md:text-sm text-toscaDark hover:text-tosca cursor-pointer">
             {t('Term and Condition')}
@@ -155,7 +117,11 @@ function FormRegister() {
             {errors.checkBox.message}
           </p>
         )}
-        <Button type="submit" className="bg-toscaDark ">
+        <Button
+          type="submit"
+          className="bg-toscaDark flex flex-row justify-center items-center gap-2"
+        >
+          {loadingLogin && <Spinner className="h-4 w-4" />}
           <p className="font-bold text-md">{t('RegisterButtonText')}</p>
         </Button>
       </form>
@@ -163,4 +129,4 @@ function FormRegister() {
   );
 }
 
-export default FormRegister;
+export default FormLogin;
