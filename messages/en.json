@@ -26,5 +26,11 @@
   "You must accept the terms and conditions": "You must accept the terms and conditions",
   "Name is required": "Name is required",
   "Name": "Name",
-  "Login": "Login"
+  "Login": "Login",
+  "Menu": "Menu",
+  "home": "Home",
+  "profile": "Profile",
+  "aboutTab": "About",
+  "Don't have an account yet": "Don't have an account yet? Please",
+  "Already have an account": "Already have an account? Please"
 }

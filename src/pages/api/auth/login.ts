@@ -6,7 +6,7 @@ import prisma from '@/lib/prisma';
 import { createResponse } from '@/utils/response';
 import { StatusCodes } from 'http-status-codes';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret'; // Ganti dengan secret yang aman
+const JWT_SECRET = process.env.JWT_SECRET || 'projectBokk'; // Ganti dengan secret yang aman
 
 export default async function handler(
   req: NextApiRequest,
@@ -61,9 +61,20 @@ export default async function handler(
       }
 
       // Buat access token
+      const expiresIn = Math.floor(Date.now() / 1000) + 60 * 60; // Waktu kedaluwarsa token
       const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET, {
-        expiresIn: '1h',
+        expiresIn,
       });
+
+      const refreshToken = jwt.sign(
+        { id: user.id, email: user.email },
+        JWT_SECRET,
+        { expiresIn: 60 * 60 * 24 * 7 }, // Refresh token kedaluwarsa dalam 7 hari
+      );
+
+      // Hitung waktu kedaluwarsa
+      const expirationDate = new Date();
+      expirationDate.setHours(expirationDate.getHours() + 1); // Tambahkan 1 jam
 
       const dataUser = {
         user: {
@@ -76,7 +87,10 @@ export default async function handler(
           update_At: user.update_At,
         },
         accessToken: token,
+        refreshToken: refreshToken,
+        expiresIn: expirationDate.toISOString(), // Kembalikan waktu kedaluwarsa dalam format ISO
       };
+
       // Kembalikan respons dengan token
       return res
         .status(StatusCodes.OK)
