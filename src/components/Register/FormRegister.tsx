@@ -7,7 +7,7 @@ import { useTranslations } from 'next-intl';
 import { useTheme } from '@/context/ThemeContext';
 import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa';
 import useAuth from '@/hooks/useAuth';
-import { useRouter } from '@/i18n/routing';
+import { Link, useRouter } from '@/i18n/routing';
 
 type FormRegisterProps = {
   locale: string; // Menerima locale sebagai props
@@ -164,6 +164,13 @@ function FormRegister({ locale }: FormRegisterProps) {
         <Button type="submit" className="bg-toscaDark ">
           <p className="font-bold text-md">{t('RegisterButtonText')}</p>
         </Button>
+
+        <div className=" text-sm text-center  ">
+          {t('Already have an account')}
+          <Link href="/login">
+            <span className="text-red-500"> {t('Login')}</span>
+          </Link>
+        </div>
       </form>
     </div>
   );

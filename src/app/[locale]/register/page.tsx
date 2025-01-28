@@ -22,7 +22,7 @@ function Register({ params: { locale } }: Props) {
   setRequestLocale(locale);
   return (
     <MasterLayout locale={locale}>
-      <div className="w-full flex flex-col items-center justify-center min-h-screen py-28 sm:py-32 lg:py-0  px-4  sm:px-0">
+      <div className="w-full flex flex-col items-center sm:justify-center min-h-screen py-4 sm:py-32 lg:py-0  px-4  sm:px-0">
         <div className="container h-full lg:flex flex-row items-stretch shadow-md border border-gray-200">
           {/* Changed items-center to items-stretch */}
           <FormRegister locale={locale} /> {/* Ensure FormRegister can grow */}

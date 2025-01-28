@@ -7,7 +7,7 @@ import { useTranslations } from 'next-intl';
 import { useTheme } from '@/context/ThemeContext';
 import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa';
 import useAuth from '@/hooks/useAuth';
-import { useRouter } from '@/i18n/routing';
+import { Link, useRouter } from '@/i18n/routing';
 
 type FormLoginProps = {
   locale: string; // Menerima locale sebagai props
@@ -126,6 +126,12 @@ function FormLogin({ locale }: FormLoginProps) {
           {loadingLogin && <Spinner className="h-4 w-4" />}
           <p className="font-bold text-md">{t('Login')}</p>
         </Button>
+        <div className=" text-sm text-center  ">
+          {t("Don't have an account yet")}
+          <Link href="/register">
+            <span className="text-red-500"> {t('Register')}</span>
+          </Link>
+        </div>
       </form>
     </div>
   );

@@ -26,5 +26,11 @@
   "You must accept the terms and conditions": "Anda harus menerima syarat dan ketentuan",
   "Name is required": "Nama diperlukan",
   "Name": "Nama",
-  "Login": "Masuk"
+  "Login": "Masuk",
+  "Menu": "Menu",
+  "home": "Beranda",
+  "profile": "Profil",
+  "aboutTab": "Tentang",
+  "Don't have an account yet": "Belum punya akun silahkan",
+  "Already have an account": "Sudah punya akun? Silakan"
 }

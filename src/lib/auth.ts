@@ -40,7 +40,9 @@ const authOptions: AuthOptions = {
               role: user.data.user.role,
               createdAt: user.data.user.createdAt,
               updatedAt: user.data.user.updatedAt,
-              accessToken: user.data.accessToken, // Simpan accessToken untuk nanti
+              accessToken: user.data.accessToken,
+              expiresIn: user.data.expiresIn,
+              refreshToken: user.data.refreshToken,
             };
           } else {
             // Jika login gagal, kembalikan null
@@ -54,15 +56,17 @@ const authOptions: AuthOptions = {
       },
     }),
   ],
-  secret: process.env.JWT_SECRET || 'projectabsenniya',
+  secret: process.env.JWT_SECRET || 'projectBokk',
 
   callbacks: {
     async jwt({ token, user }: any) {
+      console.log('user', user);
       if (user) {
-        // Menambahkan properti pengguna ke token JWT
         token = {
           ...token,
           accessToken: user.accessToken,
+          refreshToken: user.refreshToken,
+          expiresIn: user.expiresIn,
           id: user.id,
           email: user.email,
           name: user.name,
@@ -71,15 +75,46 @@ const authOptions: AuthOptions = {
           updatedAt: user.updatedAt,
         };
       }
-      if (token.exp && Date.now() >= token.exp * 1000) {
-        // Jika expired, hapus token dan sign out
-        signOut({ redirect: false });
-        return null; // Kembalikan null untuk menghapus token
+      console.log('data token', token);
+      const expirationDate = new Date(token.expiresIn).getTime(); // Konversi ke timestamp
+      const currentTime = Date.now(); // Waktu saat ini dalam milidetik
+
+      console.log('token expired', expirationDate);
+      console.log('current time', currentTime);
+
+      if (
+        (token.expiresIn && currentTime >= expirationDate) ||
+        token.accessToken === undefined
+      ) {
+        console.log('Token expired, attempting to refresh token');
+
+        // Panggil endpoint refresh token
+        const response = await fetch(`${apiUrl}/api/auth/refresh-token`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ refreshToken: token.refreshToken }), // Kirim refresh token
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          console.log('respone data refresh token ', data);
+          token.accessToken = data.accessToken; // Perbarui access token
+          token.expiresIn = new Date(Date.now() + 3600 * 1000).toISOString(); // Set waktu kedaluwarsa baru (1 jam dari sekarang)
+        } else {
+          console.log('Failed to refresh token');
+          return null; // Kembalikan null jika refresh gagal
+        }
       }
+      console.log('respone after refres data token ', token);
       return token;
     },
 
     async session({ session, token }: any) {
+      console.log('token blok session ', token);
+      session.accessToken = token.accessToken;
+      console.log('token.accessToken', token.accessToken);
       try {
         const response = await fetch(apiUrl + '/api/user/profile', {
           method: 'POST',
@@ -95,9 +130,9 @@ const authOptions: AuthOptions = {
 
         const resp = await response.json();
         if (resp.meta.statusCode !== 200) {
-          session = null;
-          signOut({ redirect: false });
-          return;
+          if (typeof window !== 'undefined') {
+            session = null;
+          }
         } else {
           session.accessToken = token.accessToken;
           session.user = {
@@ -110,13 +145,12 @@ const authOptions: AuthOptions = {
           };
 
           session.user = resp.data;
-          return session;
         }
       } catch (e) {
-        console.error('Error fetching profile:', e);
-        signOut({ redirect: false });
-        return null; // Kembalikan null untuk menghapus token
+        return null;
       }
+
+      return session;
     },
   },
 };
