@@ -35,7 +35,6 @@ export default async function handler(
           name: true,
           username: true,
           email: true,
-          role: true,
           create_At: true,
           update_At: true,
         },
@@ -46,7 +45,6 @@ export default async function handler(
           .status(StatusCodes.NOT_FOUND)
           .json(createResponse('User not found.', null, StatusCodes.NOT_FOUND));
       }
-      ``;
       // Kembalikan data pengguna
       return res
         .status(StatusCodes.OK)

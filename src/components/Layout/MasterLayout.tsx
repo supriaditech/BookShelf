@@ -14,7 +14,8 @@ const MasterLayout = async ({ children, locale }: MasterLayoutProps) => {
     <>
       <div className="relative flex flex-col min-h-screen">
         <Navbar session={session} locale={locale} />
-        <main className="flex-grow container mx-auto">{children}</main>
+
+        <main className="flex-grow  mx-auto">{children}</main>
         <Footer />
       </div>
     </>

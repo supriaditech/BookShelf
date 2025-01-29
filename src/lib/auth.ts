@@ -37,7 +37,6 @@ const authOptions: AuthOptions = {
               username: user.data.user.username,
               email: user.data.user.email,
               name: user.data.user.name,
-              role: user.data.user.role,
               createdAt: user.data.user.createdAt,
               updatedAt: user.data.user.updatedAt,
               accessToken: user.data.accessToken,
@@ -70,7 +69,6 @@ const authOptions: AuthOptions = {
           id: user.id,
           email: user.email,
           name: user.name,
-          role: user.role,
           createdAt: user.createdAt,
           updatedAt: user.updatedAt,
         };
@@ -139,7 +137,6 @@ const authOptions: AuthOptions = {
             id: token.id,
             email: token.email,
             name: token.name,
-            role: token.role,
             createdAt: token.createdAt,
             updatedAt: token.updatedAt,
           };

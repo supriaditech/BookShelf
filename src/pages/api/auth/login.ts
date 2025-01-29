@@ -61,7 +61,7 @@ export default async function handler(
       }
 
       // Buat access token
-      const expiresIn = Math.floor(Date.now() / 1000) + 60 * 60; // Waktu kedaluwarsa token
+      const expiresIn = Math.floor(Date.now() / 1000) + 86400; // Waktu kedaluwarsa token untuk 1 hari
       const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET, {
         expiresIn,
       });
@@ -82,7 +82,6 @@ export default async function handler(
           name: user.name,
           username: user.username,
           email: user.email,
-          role: user.role,
           create_At: user.create_At,
           update_At: user.update_At,
         },

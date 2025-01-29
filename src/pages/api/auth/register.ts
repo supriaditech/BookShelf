@@ -48,7 +48,6 @@ export default async function handler(
           email,
           name,
           password: hashedPassword,
-          role: 'USER',
           create_At: currentDateTime,
           update_At: currentDateTime,
         },

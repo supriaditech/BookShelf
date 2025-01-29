@@ -109,10 +109,12 @@ function FormLogin({ locale }: FormLoginProps) {
             })}
             defaultChecked
           />
-          <p>{t('I have accepted the ')}</p>
-          <span className="text-xs md:text-sm text-toscaDark hover:text-tosca cursor-pointer">
-            {t('Term and Condition')}
-          </span>
+          <p>
+            {t('I have accepted the ')}
+            <span className="text-xs md:text-sm text-toscaDark hover:text-tosca cursor-pointer">
+              {t('Term and Condition')}
+            </span>
+          </p>
         </div>
         {errors.checkBox && (
           <p className="text-red-500 text-xs -mt-3 ml-3 ">
