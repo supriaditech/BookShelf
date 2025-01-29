@@ -1,5 +1,5 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
+// This is your Prisma schema file,  
+// learn more about it in the docs: https://pris.ly/d/prisma-schema  
 
 generator client {
   provider = "prisma-client-js"
@@ -16,12 +16,41 @@ model User {
   name      String
   email     String   @unique
   password  String
-  role      Role
-  create_At DateTime
-  update_At DateTime
+  create_At DateTime @default(now())
+  update_At DateTime @updatedAt
 }
 
-enum Role {
-  ADMIN
-  USER
+model Category {
+  id             Int              @id @default(autoincrement())
+  name           String
+  slug           String           @unique
+  photo          String?
+  books          Book[]           @relation("BookToCategory")
+  BookToCategory BookToCategory[]
+}
+
+model Book {
+  id             Int              @id @default(autoincrement())
+  title          String
+  author         String
+  isbn           String           @unique
+  coverImage     String?
+  readingStatus  ReadingStatus
+  categories     Category[]       @relation("BookToCategory")
+  BookToCategory BookToCategory[]
+}
+
+enum ReadingStatus {
+  NOT_STARTED
+  IN_PROGRESS
+  COMPLETED
+}
+
+model BookToCategory {
+  book       Book     @relation(fields: [bookId], references: [id])
+  bookId     Int
+  category   Category @relation(fields: [categoryId], references: [id])
+  categoryId Int
+
+  @@id([bookId, categoryId])
 }

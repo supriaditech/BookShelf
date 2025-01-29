@@ -1,3 +1,5 @@
+import CarouselScreen from '@/components/Home/Carousel';
+import MySummary from '@/components/Home/MySummary';
 import MasterLayout from '@/components/Layout/MasterLayout';
 import ThemeToggle from '@/components/Theme/ThemeToggle';
 import { getSession, useSession } from 'next-auth/react';
@@ -21,7 +23,10 @@ export default async function Home({ params: { locale } }: Props) {
   setRequestLocale(locale);
   return (
     <MasterLayout locale={locale}>
-      <div>home</div>
+      <div className="w-full ">
+        <CarouselScreen className="w-full overflow-hidden" />
+        <MySummary />
+      </div>
     </MasterLayout>
   );
 }

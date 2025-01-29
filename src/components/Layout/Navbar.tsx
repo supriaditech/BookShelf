@@ -11,6 +11,7 @@ import { MdNightlight, MdOutlineNightlight } from 'react-icons/md';
 import React from 'react';
 import DrawerNavbar from './DrawerNavbar';
 import { Typography } from '@material-tailwind/react';
+import { FaUser } from 'react-icons/fa';
 interface NavbarProps {
   session: any;
   locale: string;
@@ -21,10 +22,15 @@ const Navbar = ({ session, locale }: NavbarProps) => {
   const [open, setOpen] = React.useState(false);
   const openDrawer = () => setOpen(true);
   const closeDrawer = () => setOpen(false);
+  const [openProfile, setOpenProfile] = React.useState(false);
+
+  const handleOpenProfile = () => {
+    setOpenProfile(!openProfile);
+  };
   console.log(theme);
   return (
     <nav
-      className={`blok top-0 w-screen p-4 ${
+      className={`sticky top-0 z-50   p-4 ${
         theme === 'dark' ? 'bg-gray-800' : 'bg-white'
       } text-${theme === 'dark' ? 'white' : 'black'} shadow`}
     >
@@ -105,13 +111,63 @@ const Navbar = ({ session, locale }: NavbarProps) => {
               {theme === 'light' ? <MdOutlineNightlight /> : <MdNightlight />}
             </button>
             {session && session?.user?.user && (
-              <div className="-mt-1">
+              <div
+                className="-mt-1 relative cursor-pointer"
+                onClick={handleOpenProfile}
+              >
                 <Typography variant="h5" className=" font-bold text-lg">
                   {session?.user?.user.name}
                 </Typography>
                 <Typography variant="h6" className=" font-light -mt-1 text-xs">
                   {session?.user?.user.email}
                 </Typography>
+                {openProfile && (
+                  <div
+                    className={`absolute z-50${
+                      theme === 'dark'
+                        ? 'text-white bg-gray-800 border-gray-700'
+                        : 'text-gray-600 bg-white border-gray-100'
+                    } w-auto mt-5 shadow-sm border rounded-sm px-5 py-2 flex flex-col gap-2 -right-3 transition-opacity duration-300 ease-in-out transform ${
+                      openProfile
+                        ? 'opacity-100 translate-y-0'
+                        : 'opacity-0 -translate-y-2'
+                    }`}
+                  >
+                    <Link
+                      href="/profile"
+                      className="cursor-pointer rounded-md hover:bg-gray-100 px-4"
+                    >
+                      <div className="flex flex-row items-center  gap-3 p-2 rounded-sm mb-1">
+                        <div>
+                          {' '}
+                          <FaUser
+                            className={`w-6 h-6 ${
+                              theme === 'dark' ? 'text-white' : 'text-gray-600'
+                            } font-light`}
+                          />
+                        </div>
+                        <Typography variant="h6" className="font-light">
+                          Profile
+                        </Typography>
+                      </div>
+                    </Link>
+                    <div
+                      onClick={() => handleLogout(session.accessToken)}
+                      className={`flex flex-row items-center mt- ${
+                        theme == 'dark'
+                          ? 'bg-white text-gray-800'
+                          : 'bg-gray-800 text-white'
+                      }  gap-3 p-1 rounded-md mb-1 cursor-pointer`}
+                    >
+                      <Typography
+                        variant="h6"
+                        className="font-base text-center  w-full "
+                      >
+                        Logout
+                      </Typography>
+                    </div>
+                  </div>
+                )}
               </div>
             )}
           </div>
