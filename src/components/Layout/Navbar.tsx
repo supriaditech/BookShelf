@@ -30,7 +30,7 @@ const Navbar = ({ session, locale }: NavbarProps) => {
   console.log(theme);
   return (
     <nav
-      className={`sticky top-0 z-50   p-4 ${
+      className={`sticky top-0 z-10  p-4 ${
         theme === 'dark' ? 'bg-gray-800' : 'bg-white'
       } text-${theme === 'dark' ? 'white' : 'black'} shadow`}
     >
@@ -52,7 +52,7 @@ const Navbar = ({ session, locale }: NavbarProps) => {
           {session ? (
             <ul className="flex space-x-20 w-full justify-center">
               <li>
-                <Link href="/home" className="hover:underline">
+                <Link href="/" className="hover:underline">
                   Home
                 </Link>
               </li>

@@ -56,14 +56,14 @@ export default async function handler(
 
       console.log('Files yang diterima:', files);
 
-      // Ambil ID kategori dari parameter
-      const categoryId = fields.id; // Pastikan ID kategori dikirim dalam form-data
+      // Ambil ID kategori dari fields
+      const categoryId = Number(fields.id);
       const name = Array.isArray(fields.name) ? fields.name[0] : fields.name;
       const slug = Array.isArray(fields.slug) ? fields.slug[0] : fields.slug;
 
       if (!categoryId || !name || !slug) {
         if (files.photo && files.photo.length > 0) {
-          await fs.unlink(files.photo[0].filepath); // Hapus file jika ada
+          await fs.unlink(files.photo[0].filepath); // Hapus file jika validasi gagal
         }
         return res
           .status(StatusCodes.BAD_REQUEST)
@@ -76,7 +76,31 @@ export default async function handler(
           );
       }
 
-      // Validasi file
+      // Ambil kategori yang ada di database
+      const existingCategory = await prisma.category.findUnique({
+        where: { id: categoryId },
+      });
+
+      if (!existingCategory) {
+        return res
+          .status(StatusCodes.NOT_FOUND)
+          .json(
+            createResponse('Category not found', null, StatusCodes.NOT_FOUND),
+          );
+      }
+
+      // Cek apakah data yang dikirim sama dengan data di database
+      const isSameData =
+        existingCategory.name === name && existingCategory.slug === slug;
+
+      // Jika tidak ada perubahan dan tidak ada foto baru, kembalikan respons
+      if (isSameData && (!files.photo || files.photo.length === 0)) {
+        return res
+          .status(StatusCodes.OK)
+          .json(createResponse('No changes made', null, StatusCodes.OK));
+      }
+
+      // Validasi file jika ada
       let photoUrl: string | null = null;
       if (files.photo && files.photo.length > 0) {
         const photo = files.photo[0]; // Akses elemen pertama dari array
@@ -111,62 +135,40 @@ export default async function handler(
         photoUrl = `/uploads/categories/${path.basename(photo.filepath)}`;
       }
 
-      // Update category di database
-      try {
-        const updatedCategory = await prisma.category.update({
-          where: { id: categoryId },
-          data: {
-            name: name as string,
-            slug: slug as string,
-            photo: photoUrl, // Hanya update foto jika ada
-          },
-        });
+      // Update kategori di database
+      const updatedCategory = await prisma.category.update({
+        where: { id: Number(categoryId) },
+        data: {
+          name: name as string,
+          slug: slug as string,
+          photo: photoUrl || existingCategory.photo, // Gunakan foto yang ada jika tidak ada foto baru
+        },
+      });
 
-        // Kembalikan kategori yang diperbarui
-        return res
-          .status(StatusCodes.OK)
-          .json(
-            createResponse(
-              'Category updated successfully',
-              updatedCategory,
-              StatusCodes.OK,
-            ),
-          );
-      } catch (error: any) {
-        console.error('Kesalahan saat memperbarui kategori:', error);
-
-        // Jika terjadi kesalahan unik pada slug, hapus foto
-        if (error.code === 'P2002') {
-          // Prisma error code for unique constraint violation
-          if (files.photo && files.photo.length > 0) {
-            await fs.unlink(files.photo[0].filepath); // Hapus file jika ada
-          }
-          return res
-            .status(StatusCodes.CONFLICT)
-            .json(
-              createResponse('Slug must be unique', null, StatusCodes.CONFLICT),
-            );
-        }
-
-        // Hapus foto jika terjadi kesalahan lain
-        if (files.photo && files.photo.length > 0) {
-          await fs.unlink(files.photo[0].filepath); // Hapus file jika ada
-        }
-        return res
-          .status(StatusCodes.INTERNAL_SERVER_ERROR)
-          .json(
-            createResponse(
-              'Failed to update category',
-              null,
-              StatusCodes.INTERNAL_SERVER_ERROR,
-            ),
-          );
-      }
-    } catch (error) {
-      console.error('Kesalahan saat memverifikasi token:', error); // Log kesalahan
+      // Kembalikan kategori yang diperbarui
       return res
-        .status(StatusCodes.UNAUTHORIZED)
-        .json(createResponse('Invalid token', null, StatusCodes.UNAUTHORIZED));
+        .status(StatusCodes.OK)
+        .json(
+          createResponse(
+            'Category updated successfully',
+            updatedCategory,
+            StatusCodes.OK,
+          ),
+        );
+    } catch (error) {
+      console.error(
+        'Kesalahan saat memverifikasi token atau mengupdate kategori:',
+        error,
+      ); // Log kesalahan
+      return res
+        .status(StatusCodes.INTERNAL_SERVER_ERROR)
+        .json(
+          createResponse(
+            'Internal Server Error',
+            null,
+            StatusCodes.INTERNAL_SERVER_ERROR,
+          ),
+        );
     }
   } else {
     return res

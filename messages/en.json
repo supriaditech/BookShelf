@@ -5,7 +5,8 @@
   "BookShelf": {
     "Register": "Register - BookShelf",
     "Home": "Home - BookShelf",
-    "Login": "Login - BookShelf"
+    "Login": "Login - BookShelf",
+    "Categories": "Categories - BookShelf"
   },
   "LogoImageAlt": "Logo Image",
   "RegisterTitle": "Register",

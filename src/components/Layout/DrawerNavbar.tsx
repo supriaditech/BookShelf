@@ -1,11 +1,5 @@
-'use client';
 import React from 'react';
-import {
-  Drawer,
-  Button,
-  Typography,
-  IconButton,
-} from '@material-tailwind/react';
+import { Drawer, IconButton, Typography } from '@material-tailwind/react';
 import { GoHomeFill } from 'react-icons/go';
 import { BsFillQuestionDiamondFill } from 'react-icons/bs';
 import { FaUser } from 'react-icons/fa';
@@ -33,12 +27,12 @@ function DrawerNavbar({
 }: DrawerNavbar) {
   const { theme, toggleTheme } = useTheme();
   const t = useTranslations();
-  console.log('use client', session);
+
   const tabBar = [
     {
       id: 1,
       name: t('home'), // Use translation function
-      slug: 'home',
+      slug: '/',
       icon: (
         <GoHomeFill
           className={`w-6 h-6 ${
@@ -75,6 +69,7 @@ function DrawerNavbar({
 
   return (
     <React.Fragment>
+      {open && <div className={`fixed inset-0 bg-black opacity-50 z-40`} />}
       <Drawer
         open={open}
         onClose={closeDrawer}
@@ -84,18 +79,18 @@ function DrawerNavbar({
         }`}
       >
         <div className="relative h-full ">
-          <div className="mb-2  flex items-center justify-between">
+          <div className="mb-2 flex items-center justify-between">
             {session && session?.user?.user ? (
               <div>
-                <Typography variant="h5" className=" font-bold text-lg">
+                <Typography variant="h5" className="font-bold text-lg">
                   {session?.user?.user.name}
                 </Typography>
-                <Typography variant="h6" className=" font-light -mt-1 text-xs">
+                <Typography variant="h6" className="font-light -mt-1 text-xs">
                   {session?.user?.user.email}
                 </Typography>
               </div>
             ) : (
-              <Typography variant="h5" className=" font-bold text-lg">
+              <Typography variant="h5" className="font-bold text-lg">
                 {t('Menu')}
               </Typography>
             )}
@@ -126,16 +121,15 @@ function DrawerNavbar({
               </div>
             </Link>
           ))}
-
           <div
             onClick={() => handleLogout(session.accessToken)}
             className={`flex flex-row items-center mt- ${
               theme == 'dark'
                 ? 'bg-white text-gray-800'
                 : 'bg-gray-800 text-white'
-            }  gap-3 p-1 rounded-md mb-1 cursor-pointer`}
+            } gap-3 p-1 rounded-md mb-1 cursor-pointer`}
           >
-            <Typography variant="h6" className="font-base text-center  w-full ">
+            <Typography variant="h6" className="font-base text-center w-full ">
               Logout
             </Typography>
           </div>

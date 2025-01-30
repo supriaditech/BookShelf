@@ -66,5 +66,6 @@ export const config = {
     '/login',
     '/register',
     '/profile/:path*',
+    '/categories/:path*',
   ], // Tambahkan rute register
 };
