@@ -60,21 +60,21 @@ function CarouselScreen({
         <LoadingImage
           src={'/images/Banner1.png'}
           alt={'image 1'}
-          className="object-cover w-full h-[500px] "
+          className="object-cover w-full h-full lg:h-[500] aspect-[5/3] lg:aspect-[5/2] xl:aspect-[5/1.2] "
           height={height}
           width={width}
         />
         <LoadingImage
           src={'/images/Banner2.png'}
           alt={'image 1'}
-          className="object-cover w-full h-[500px] "
+          className="object-cover w-full h-full lg:h-[500] aspect-[5/3] lg:aspect-[5/2] xl:aspect-[5/1.2] "
           height={height}
           width={width}
         />
         <LoadingImage
           src={'/images/Banner3.png'}
           alt={'image 1'}
-          className="object-cover w-full h-[500px] "
+          className="object-cover w-full h-full lg:h-[500] aspect-[5/3] lg:aspect-[5/2] xl:aspect-[5/1.2] "
           height={height}
           width={width}
         />

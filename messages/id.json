@@ -5,7 +5,8 @@
   "BookShelf": {
     "Register": "Daftar Akun - BookShelf",
     "Home": "Beranda - BookShelf",
-    "Login": "Masuk - BookShelf"
+    "Login": "Masuk - BookShelf",
+    "Categories": "Categori - BookShelf"
   },
   "LogoImageAlt": "Gambar Logo",
   "RegisterTitle": "Daftar",

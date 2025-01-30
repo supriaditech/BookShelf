@@ -35,16 +35,19 @@ const useAuth = (locale: string) => {
       return null; // Hentikan eksekusi jika validasi gagal
     }
 
-    const api = new Api('/api/auth/register', false, 'json');
-    api.setBody({
+    const api = new Api();
+    api.auth = false;
+    api.url = '/api/auth/register';
+    api.type = 'json';
+    api.body = {
       username: data.username,
       email: data.email,
       password: data.password,
       name: data.name,
-    });
+    };
 
     try {
-      const response = await api.call('POST');
+      const response = await api.call();
       if (response.meta.statusCode === 201) {
         toast.update(id, {
           render: (
@@ -139,10 +142,13 @@ const useAuth = (locale: string) => {
   const handleLogout = async (token: string) => {
     const id = toast.loading('Logout your account...');
 
-    const api = new Api('/api/auth/logout', true, 'json');
+    const api = new Api();
+    api.url = '/api/auth/logout';
+    api.auth = true;
+    api.type = 'json';
     api.token = token;
     try {
-      const response = await api.call('POST');
+      const response = await api.call();
       if (response.meta.statusCode === 200) {
         toast.update(id, {
           render: <p className="text-base font-bold">Your account logout.</p>,
