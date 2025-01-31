@@ -1,7 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import prisma from '@/lib/prisma';
-import { unstable_getServerSession } from 'next-auth/next';
-import authOptions from '@/lib/auth';
 import { StatusCodes } from 'http-status-codes';
 import { createResponse } from '@/utils/response';
 import { verify } from 'jsonwebtoken';

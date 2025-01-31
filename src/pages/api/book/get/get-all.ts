@@ -17,31 +17,17 @@ export default async function handler(
       .json(createResponse('Unauthorized', null, StatusCodes.UNAUTHORIZED));
   }
 
-  const { id } = req.query;
-
   if (req.method === 'POST') {
     try {
+      // Mengambil semua kategori dari database
       const decoded = verify(token, JWT_SECRET);
-
-      const category = await prisma.category.findUnique({
-        where: { id: Number(id) },
+      const book = await prisma.book.findMany({
+        include: { categories: true },
       });
-
-      if (!category) {
-        return res
-          .status(StatusCodes.NOT_FOUND)
-          .json(
-            createResponse('Category not found', null, StatusCodes.NOT_FOUND),
-          );
-      }
-
       return res
         .status(StatusCodes.OK)
-        .json(
-          createResponse('Category get successfully', category, StatusCodes.OK),
-        );
+        .json(createResponse('book get successfully', book, StatusCodes.OK));
     } catch (error) {
-      console.error('Error fetching category:', error);
       return res
         .status(StatusCodes.UNAUTHORIZED)
         .json(createResponse('Invalid token', null, StatusCodes.UNAUTHORIZED));

@@ -11,8 +11,9 @@ import DialogEditCategories from './Modal/DialogEditCategories';
 import { BiX } from 'react-icons/bi';
 import { useTheme } from '@/context/ThemeContext';
 import DialogDeleteCategories from './Modal/DialogDelete';
+import { useTranslations } from 'next-intl';
 
-const ITEMS_PER_PAGE = 9;
+const ITEMS_PER_PAGE = 6;
 
 function ListCategories({ session }: { session: SessionType }) {
   const {
@@ -26,10 +27,11 @@ function ListCategories({ session }: { session: SessionType }) {
     handleOpenDelete,
     openDelete,
   } = useCategories(session.accessToken);
+  const t = useTranslations();
   const [currentPage, setCurrentPage] = React.useState(1);
   const [dataEdit, setDataEdit] = React.useState();
   const [dataDelete, setDataDelete] = React.useState();
-  const { theme, toggleTheme } = useTheme();
+  const { theme } = useTheme();
   const totalPages = Math.ceil(
     (listCategories?.data?.length || 0) / ITEMS_PER_PAGE,
   );
@@ -45,7 +47,6 @@ function ListCategories({ session }: { session: SessionType }) {
   };
 
   const handleDeleteClick = (category: any) => {
-    console.log('category', category);
     setDataDelete(category);
     handleOpenDelete();
   };
@@ -53,13 +54,13 @@ function ListCategories({ session }: { session: SessionType }) {
   return (
     <div>
       <div className="flex flex-row justify-between items-center overflow-scroll">
-        <p className="text-2xl font-bold">List Categories</p>
+        <p className="text-2xl font-bold">{t('List Categories')}</p>
         <Button
           className="flex flex-row gap-2 items-center bg-green-500"
           onClick={handleOpen}
         >
           <MdAddCircleOutline className="w-6 h-6" />
-          <p>Tambah Category</p>
+          <p>{t('Tambah Category')}</p>
         </Button>
       </div>
       <div className="mt-4 overflow-x-auto">
@@ -102,7 +103,7 @@ function ListCategories({ session }: { session: SessionType }) {
                         onClick={() => handleEditClick(category)}
                       >
                         <FiEdit3 className="w-6 h-6" />
-                        <p>Edit Category</p>
+                        <p>{t('Edit Category')}</p>
                       </Button>
                     </div>
                     <div
@@ -110,10 +111,16 @@ function ListCategories({ session }: { session: SessionType }) {
                         theme == 'dark'
                           ? 'bg-white text-black'
                           : 'bg-black text-white'
-                      }bg-transparent  text-center p-2 justify-center`}
+                      }bg-transparent  text-center p-2 justify-center rounded-md`}
                       onClick={() => handleEditClick(category)}
                     >
-                      <p className="text-center">Lihat Selengkapnya</p>
+                      <p
+                        className={`${
+                          theme === 'dark' ? 'text-black' : 'text-white'
+                        }  text-center`}
+                      >
+                        {t('Lihat Selengkapnya')}
+                      </p>
                     </div>
                     <div
                       className="-top-4 -right-4 rounded-full text-white absolute bg-red-500 p-2"
@@ -126,7 +133,7 @@ function ListCategories({ session }: { session: SessionType }) {
               </ul>
             ) : (
               <div className="flex flex-col border border-gray-200 justify-center items-center gap-1 p-20">
-                <p>No categories found.</p>
+                <p>{t('No categories found.')}</p>
               </div>
             )}
           </>
@@ -138,10 +145,10 @@ function ListCategories({ session }: { session: SessionType }) {
             disabled={currentPage === 1}
             onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
           >
-            Previous
+            {t('Previous')}
           </Button>
           <span>
-            Page {currentPage} of {totalPages}
+            {t('Page')} {currentPage} {t('of')} {totalPages}
           </span>
           <Button
             disabled={currentPage === totalPages}
@@ -149,7 +156,7 @@ function ListCategories({ session }: { session: SessionType }) {
               setCurrentPage((prev) => Math.min(prev + 1, totalPages))
             }
           >
-            Next
+            {t('Next')}
           </Button>
         </div>
 

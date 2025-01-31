@@ -1,12 +1,11 @@
 import { useTranslations } from 'next-intl';
-import React, { useEffect } from 'react';
+import React from 'react';
 import {
   Button,
   Dialog,
   DialogHeader,
   DialogBody,
   DialogFooter,
-  Input,
   Spinner,
 } from '@material-tailwind/react';
 import { useCategories } from '@/hooks/useCategories';
@@ -26,16 +25,19 @@ const DialogDeleteCategories: React.FC<Props> = ({
 }) => {
   const t = useTranslations();
   const { loading, handleDelete } = useCategories(token);
+
   let Message;
-  if (dataDelete !== null || dataDelete !== undefined) {
-    Message = `Apakah kamu yakin ingin menghapus categori ${dataDelete?.name} dengan
-          ${dataDelete?.id}`;
+  if (dataDelete) {
+    Message = `${t('Are you sure you want to delete the category')} ${
+      dataDelete?.name
+    } ${t('with ID')} ${dataDelete?.id}?`;
   }
 
   const onSubmit = async (id: number) => {
     await handleDelete(id);
     handleOpenDelete(); // Menutup dialog setelah berhasil
   };
+
   return (
     <Dialog open={openDelete} handler={handleOpenDelete}>
       <DialogHeader>{t('Delete Categories')}</DialogHeader>

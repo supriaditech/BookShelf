@@ -99,8 +99,6 @@ export const useCategories = (token: string) => {
     // Log the formData contents
     const formDataEntries = {};
 
-    console.log('FormData contents:', formDataEntries);
-
     const api = new Api();
     api.url = '/api/categories/create-categorie';
     api.auth = true;
@@ -108,7 +106,6 @@ export const useCategories = (token: string) => {
     api.type = 'multipart';
     api.body = formData;
     const response = await api.call();
-    console.log(response);
     if (response.meta.statusCode === 200) {
       toast.success('Category created successfully!');
       setOpen(false);
@@ -151,7 +148,6 @@ export const useCategories = (token: string) => {
     api.body = formData;
 
     const response = await api.call();
-    console.log(response);
 
     if (response.meta.statusCode === 200) {
       toast.success('Category edited successfully!');
@@ -175,7 +171,6 @@ export const useCategories = (token: string) => {
     api.type = 'json';
     api.body = { id: id };
     const response = await api.call();
-    console.log(response);
 
     if (response.meta.statusCode === 200) {
       toast.success('Category delete successfully!');

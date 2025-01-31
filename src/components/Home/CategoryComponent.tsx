@@ -1,5 +1,6 @@
 'use client';
 import { useCategories } from '@/hooks/useCategories';
+import { useTranslations } from 'next-intl';
 import React from 'react';
 import { LoadingImage } from '../LazyLoading/LoadingImage';
 import { SessionType } from '@/types/SessionType';
@@ -10,28 +11,31 @@ function CategoryComponent({ session }: { session: SessionType }) {
   const { listCategories, error, isLoading } = useCategories(
     session.accessToken,
   );
-  console.log(listCategories);
+  const t = useTranslations();
 
   return (
     <div className="container mx-auto my-10 px-4">
       <div className="flex flex-row justify-between items-center">
-        <p className="text-2xl font-bold">Categories</p>
+        <p className="text-2xl font-bold">{t('categories')}</p>
         <Link href={'/categories'}>
-          <p className="text-lg font-bold">View All</p>
+          <p className="text-lg font-bold">{t('viewAll')}</p>
         </Link>
       </div>
 
       <div className="mt-4 overflow-x-auto">
         {error && (
           <div className="flex flex-col border border-gray-200 justify-center items-center gap-1 p-20">
-            <p>Error loading categories: {error.message}</p>
+            <p>
+              {t('errorLoadingCategories')}
+              {error.message}
+            </p>
           </div>
         )}
 
         {isLoading ? (
           <div className="flex flex-col border border-gray-200 justify-center items-center gap-1 p-20">
             <Spinner className="w-12 h-12 text-blue-500" />
-            <p>Loading categories...</p>
+            <p>{t('loadingCategories')}</p>
           </div>
         ) : (
           <>
@@ -42,7 +46,7 @@ function CategoryComponent({ session }: { session: SessionType }) {
                 {listCategories.data.map((category) => (
                   <li
                     key={category.id}
-                    className="border p-4 rounded shadow flex-none w-full md:w-1/3" // Setel lebar kategori
+                    className="border p-4 rounded shadow flex-none w-full md:w-1/3"
                   >
                     <LoadingImage
                       src={category.photo}
@@ -59,7 +63,7 @@ function CategoryComponent({ session }: { session: SessionType }) {
                 ))}
               </ul>
             ) : (
-              <p>No categories found.</p>
+              <p>{t('noCategoriesFound')}</p>
             )}
           </>
         )}

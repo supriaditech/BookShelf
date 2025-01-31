@@ -64,7 +64,7 @@ const DialogEditCategories: React.FC<Props> = ({
     setPreview(null);
   };
   const idCategory =
-    'ID category ' + dataEdit !== null || dataEdit !== undefined
+    t('ID category ') + dataEdit !== null || dataEdit !== undefined
       ? dataEdit?.id
       : '-';
   return (
