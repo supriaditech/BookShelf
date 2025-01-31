@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React from 'react';
 import {
   Button,
   Dialog,
@@ -10,7 +10,6 @@ import {
   Spinner,
 } from '@material-tailwind/react';
 import { useTranslations } from 'next-intl';
-import { useForm, SubmitHandler } from 'react-hook-form';
 import { useCategories } from '@/hooks/useCategories';
 
 interface Props {
@@ -57,7 +56,9 @@ const DialogCategories: React.FC<Props> = ({ handleOpen, open, token }) => {
             {...register('name', { required: true })}
             error={!!errors.name}
           />
-          {errors.name && <p className="text-red-500">Name is required.</p>}
+          {errors.name && (
+            <p className="text-red-500">{t('Name is required.')}</p>
+          )}
 
           <Input
             crossOrigin={undefined}
@@ -67,7 +68,9 @@ const DialogCategories: React.FC<Props> = ({ handleOpen, open, token }) => {
             error={!!errors.photo}
             onChange={handleFileChange} // Menambahkan event handler
           />
-          {errors.photo && <p className="text-red-500">Photo is required.</p>}
+          {errors.photo && (
+            <p className="text-red-500">{t('Photo is required.')}</p>
+          )}
 
           {/* Menampilkan preview gambar jika ada */}
           {preview && (

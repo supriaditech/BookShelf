@@ -27,7 +27,6 @@ const Navbar = ({ session, locale }: NavbarProps) => {
   const handleOpenProfile = () => {
     setOpenProfile(!openProfile);
   };
-  console.log(theme);
   return (
     <nav
       className={`sticky top-0 z-10  p-4 ${

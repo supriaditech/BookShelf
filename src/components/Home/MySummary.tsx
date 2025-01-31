@@ -1,5 +1,6 @@
 'use client';
 import { useTheme } from '@/context/ThemeContext';
+import { useTranslations } from 'next-intl';
 import React from 'react';
 import { BiSolidBookBookmark } from 'react-icons/bi';
 import { FaBook } from 'react-icons/fa';
@@ -7,11 +8,11 @@ import { FaBookOpenReader } from 'react-icons/fa6';
 
 function MySummary() {
   const { theme, toggleTheme } = useTheme();
-
+  const t = useTranslations();
   return (
-    <div className=" container  sm:mx-auto  mt-10 px-4 ">
-      <p className="text-2xl font-bold">My Summary</p>
-      <div className="grid sm:grid-cols-3 gap-4 mt-4 ">
+    <div className="container sm:mx-auto mt-10 px-4">
+      <p className="text-2xl font-bold">{t('MySummary')}</p>
+      <div className="grid sm:grid-cols-3 gap-4 mt-4">
         <div
           className={`${
             theme === 'dark'
@@ -21,8 +22,10 @@ function MySummary() {
         >
           <FaBook className="w-12 h-12" />
           <div>
-            <p className="text-sm sm:text-base">Total Buku</p>
-            <p className="font-bold text-base sm:text-lg">Jumlah : 3</p>
+            <p className="text-sm sm:text-base">{t('totalBooks')}</p>
+            <p className="font-bold text-base sm:text-lg">
+              {t('count', { count: 3 })}
+            </p>
           </div>
         </div>
         <div
@@ -34,8 +37,10 @@ function MySummary() {
         >
           <FaBookOpenReader className="w-12 h-12" />
           <div>
-            <p className="text-sm sm:text-base">Sedang di baca</p>
-            <p className="font-bold text-base sm:text-lg">Jumlah : 3</p>
+            <p className="text-sm sm:text-base">{t('currentlyReading')}</p>
+            <p className="font-bold text-base sm:text-lg">
+              {t('count', { count: 3 })}
+            </p>
           </div>
         </div>
         <div
@@ -47,8 +52,10 @@ function MySummary() {
         >
           <BiSolidBookBookmark className="w-12 h-12" />
           <div>
-            <p className="text-sm sm:text-base">Selesai di baca</p>
-            <p className="font-bold text-base sm:text-lg">Jumlah : 3</p>
+            <p className="text-sm sm:text-base">{t('finishedReading')}</p>
+            <p className="font-bold text-base sm:text-lg">
+              {t('count', { count: 3 })}
+            </p>
           </div>
         </div>
       </div>

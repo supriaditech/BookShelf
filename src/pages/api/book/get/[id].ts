@@ -23,22 +23,21 @@ export default async function handler(
     try {
       const decoded = verify(token, JWT_SECRET);
 
-      const category = await prisma.category.findUnique({
+      const book = await prisma.book.findUnique({
         where: { id: Number(id) },
+        include: { categories: true },
       });
 
-      if (!category) {
+      if (!book) {
         return res
           .status(StatusCodes.NOT_FOUND)
-          .json(
-            createResponse('Category not found', null, StatusCodes.NOT_FOUND),
-          );
+          .json(createResponse('Book not found', null, StatusCodes.NOT_FOUND));
       }
 
       return res
         .status(StatusCodes.OK)
         .json(
-          createResponse('Category get successfully', category, StatusCodes.OK),
+          createResponse('Category get successfully', book, StatusCodes.OK),
         );
     } catch (error) {
       console.error('Error fetching category:', error);
