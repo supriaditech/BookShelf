@@ -63,16 +63,8 @@ export default async function handler(
       const title = fields.title?.[0] || fields.title;
       const author = fields.author?.[0] || fields.author;
       const isbn = fields.isbn?.[0] || fields.isbn;
-      const readingStatus = fields.readingStatus?.[0] || fields.readingStatus;
 
-      if (
-        !bookId ||
-        !title ||
-        !author ||
-        !isbn ||
-        !readingStatus ||
-        categoryIds.length === 0
-      ) {
+      if (!bookId || !title || !author || !isbn || categoryIds.length === 0) {
         if (files.coverImage?.[0])
           await fs.unlink(files.coverImage[0].filepath);
         return res

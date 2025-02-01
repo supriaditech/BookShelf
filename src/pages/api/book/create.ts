@@ -7,7 +7,6 @@ import path from 'path';
 import { IncomingForm } from 'formidable';
 import { v4 as uuidv4 } from 'uuid';
 import { promises as fs } from 'fs';
-import { ReadingStatus } from '@prisma/client';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'projectBokk'; // Ganti dengan secret yang aman
 const UPLOAD_DIR = path.join(process.cwd(), 'public/uploads/books');
@@ -61,14 +60,12 @@ export default async function handler(
         ? fields.author[0]
         : fields.author;
       const isbn = Array.isArray(fields.isbn) ? fields.isbn[0] : fields.isbn;
-      const readingStatus = Array.isArray(fields.readingStatus)
-        ? fields.readingStatus[0]
-        : fields.readingStatus;
+
       const categoryIds = Array.isArray(fields.categoryIds)
         ? fields.categoryIds
         : [fields.categoryIds];
 
-      if (!title || !author || !isbn || !readingStatus || !categoryIds) {
+      if (!title || !author || !isbn || !categoryIds) {
         if (files.coverImage && files.coverImage.length > 0) {
           await fs.unlink(files.coverImage[0].filepath); // Hapus file jika ada
         }
@@ -76,7 +73,7 @@ export default async function handler(
           .status(StatusCodes.BAD_REQUEST)
           .json(
             createResponse(
-              'Title, author, isbn, readingStatus, and categoryIds are required',
+              'Title, author, isbn, and categoryIds are required',
               null,
               StatusCodes.BAD_REQUEST,
             ),
