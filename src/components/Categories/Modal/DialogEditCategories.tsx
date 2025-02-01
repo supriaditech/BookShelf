@@ -86,7 +86,9 @@ const DialogEditCategories: React.FC<Props> = ({
             {...register('name', { required: true })}
             error={!!errors.name}
           />
-          {errors.name && <p className="text-red-500">Name is required.</p>}
+          {errors.name && (
+            <p className="text-red-500">{t('Name is required')}.</p>
+          )}
 
           <Input
             crossOrigin={undefined}
@@ -96,7 +98,9 @@ const DialogEditCategories: React.FC<Props> = ({
             error={!!errors.photo}
             onChange={handleFileChange} // Menambahkan event handler
           />
-          {errors.photo && <p className="text-red-500">Photo is required.</p>}
+          {errors.photo && (
+            <p className="text-red-500">{t('Photo is required')}</p>
+          )}
 
           {/* Menampilkan preview gambar jika ada */}
           {preview && (

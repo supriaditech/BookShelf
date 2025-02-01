@@ -5,29 +5,30 @@ import { Button, Spinner } from '@material-tailwind/react';
 import React from 'react';
 import { LoadingImage } from '../LazyLoading/LoadingImage';
 import { MdAddCircleOutline } from 'react-icons/md';
-import DialogCategories from './Modal/DialogCategories';
 import { FiEdit3 } from 'react-icons/fi';
-import DialogEditCategories from './Modal/DialogEditCategories';
 import { BiX } from 'react-icons/bi';
 import { useTheme } from '@/context/ThemeContext';
-import DialogDeleteCategories from './Modal/DialogDelete';
 import { useTranslations } from 'next-intl';
 import { useRouter } from '@/i18n/routing';
+import useBook from '@/hooks/useBook';
+import { CategoryType } from '@/types/BookType';
+import DialogCreateBook from './DialogBook/DialogCreateBook';
+import DialogEditBook from './DialogBook/DialogEditBook';
 
 const ITEMS_PER_PAGE = 6;
 
-function ListCategories({ session }: { session: SessionType }) {
+function ListBook({ session }: { session: SessionType }) {
+  const { handleOpenDelete, openDelete } = useCategories(session.accessToken);
+
   const {
-    listCategories,
+    listDataBook,
     error,
     isLoading,
-    handleOpen,
     open,
+    handleOpen,
     openEdit,
     handleOpenEdit,
-    handleOpenDelete,
-    openDelete,
-  } = useCategories(session.accessToken);
+  } = useBook(session.accessToken);
   const t = useTranslations();
   const router = useRouter();
   const [currentPage, setCurrentPage] = React.useState(1);
@@ -35,22 +36,21 @@ function ListCategories({ session }: { session: SessionType }) {
   const [dataDelete, setDataDelete] = React.useState();
   const { theme } = useTheme();
   const totalPages = Math.ceil(
-    (listCategories?.data?.length || 0) / ITEMS_PER_PAGE,
+    (listDataBook?.data?.length || 0) / ITEMS_PER_PAGE,
   );
 
-  console.log('listCategories', listCategories);
   // Menghitung kategori yang akan ditampilkan pada halaman saat ini
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const endIndex = startIndex + ITEMS_PER_PAGE;
-  const currentCategories = listCategories?.data?.slice(startIndex, endIndex);
+  const currentDataBook = listDataBook?.data?.slice(startIndex, endIndex);
 
-  const handleEditClick = (category: any) => {
-    setDataEdit(category);
+  const handleEditClick = (Book: any) => {
+    setDataEdit(Book);
     handleOpenEdit();
   };
 
-  const handleDeleteClick = (category: any) => {
-    setDataDelete(category);
+  const handleDeleteClick = (Book: any) => {
+    setDataDelete(Book);
     handleOpenDelete();
   };
 
@@ -61,14 +61,14 @@ function ListCategories({ session }: { session: SessionType }) {
     <div>
       <div className="flex flex-row justify-between items-center overflow-scroll px-8 sm:px-0">
         <p className="text-lg sm:text-2xl font-bold ">
-          {t('List Categories')} ({listCategories?.data?.length || 0})
+          {t('List Book')} ({listDataBook?.data?.length || 0})
         </p>
         <Button
           className="flex flex-row gap-2 items-center bg-green-500 -mr-2 sm:mr-0"
           onClick={handleOpen}
         >
           <MdAddCircleOutline className="w-6 h-6" />
-          <p>{t('Tambah Category')}</p>
+          <p>{t('Tambah buku')}</p>
         </Button>
       </div>
       <div className="mt-4 overflow-x-auto">
@@ -85,34 +85,54 @@ function ListCategories({ session }: { session: SessionType }) {
           </div>
         ) : (
           <>
-            {currentCategories && currentCategories.length > 0 ? (
+            {currentDataBook && currentDataBook.length > 0 ? (
               <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 px-8 sm:px-4 lg::px-0 gap-6 p-4">
-                {currentCategories.map((category) => (
+                {currentDataBook.map((book) => (
                   <li
-                    key={category.id}
+                    key={book.id}
                     className="relative border p-4 rounded shadow flex-none w-full " // Setel lebar kategori
                   >
-                    <LoadingImage
-                      src={category.photo}
-                      alt={category.name}
-                      className="w-full h-32 object-cover rounded"
-                      width={500}
-                      height={200}
-                    />
-                    <div className="grid grid-cols-2 justify-between items-center">
-                      <div>
-                        <h2 className="text-lg font-semibold mt-2">
-                          {category.name}
-                        </h2>
-                        <p className="text-sm text-gray-500">{category.slug}</p>
+                    <div className="grid grid-cols-4 gap-2 ">
+                      <LoadingImage
+                        src={book.coverImage}
+                        alt={book.title}
+                        className=" col-span-1 w-full h-36 rounded-md object-cover "
+                        width={500}
+                        height={200}
+                      />
+                      <div className="col-span-3">
+                        <h2 className="text-lg font-semibold ">{book.title}</h2>
+                        <p className="text-sm text-gray-800">
+                          {t('Author')} : {book.author}
+                        </p>
+                        <p className="text-sm text-gray-800">
+                          {t('ISBN')} : {book.isbn}
+                        </p>
+                        <p className="text-sm font-bold ">
+                          {t('Categories')} :
+                        </p>
+
+                        <div className="flex flex-row mt-1 gap-2 flex-wrap">
+                          {book.categories.map((category: CategoryType) => (
+                            <p
+                              className="text-[10px]  text-white rounded-md  px-4 bg-gray-800 whitespace-nowrap "
+                              key={category.id}
+                            >
+                              {category.name}
+                            </p>
+                          ))}
+                        </div>
                       </div>
-                      <Button
-                        className="flex flex-row gap-2 items-center  border-2 border-blue-500 bg-transparent text-blue-500"
-                        onClick={() => handleEditClick(category)}
+                    </div>
+                    <div className="flex my-1 flex-row justify-between items-center">
+                      <p className="font-bold">Status :</p>
+                      <div
+                        className=" px-2 py-1  flex flex-row gap-2 items-center  border-2 border-blue-500 bg-transparent text-sm text-blue-500 rounded-md"
+                        onClick={() => handleEditClick(book)}
                       >
-                        <FiEdit3 className="w-6 h-6" />
-                        <p>{t('Edit Category')}</p>
-                      </Button>
+                        <FiEdit3 />
+                        <p>{t('Edit')}</p>
+                      </div>
                     </div>
                     <div
                       className={`flex w-full flex-row gap-2 items-center  border-2 ${
@@ -120,19 +140,19 @@ function ListCategories({ session }: { session: SessionType }) {
                           ? 'bg-white text-black'
                           : 'bg-black text-white'
                       }bg-transparent  text-center p-2 justify-center rounded-md`}
-                      onClick={() => handleViewDetails(category.slug)}
+                      onClick={() => handleViewDetails(book.author)}
                     >
                       <p
                         className={`cursor-pointer ${
                           theme === 'dark' ? 'text-black' : 'text-white'
                         }  text-center`}
                       >
-                        {t('Lihat Selengkapnya')}
+                        {t('Lihat buku')}
                       </p>
                     </div>
                     <div
                       className="cursor-pointer -top-4 -right-4 rounded-full text-white absolute bg-red-500 p-2"
-                      onClick={() => handleDeleteClick(category)}
+                      onClick={() => handleDeleteClick(book)}
                     >
                       <BiX className="w-6 h-6" />
                     </div>
@@ -173,29 +193,23 @@ function ListCategories({ session }: { session: SessionType }) {
             {t('Next')}
           </Button>
         </div>
+        {open && (
+          <DialogCreateBook
+            open={open}
+            handleOpen={handleOpen}
+            token={session?.accessToken}
+          />
+        )}
 
-        <DialogCategories
-          open={open}
-          handleOpen={handleOpen}
-          token={session?.accessToken}
-        />
-
-        <DialogEditCategories
+        <DialogEditBook
           dataEdit={dataEdit}
           handleOpenEdit={handleOpenEdit}
           openEdit={openEdit}
           token={session?.accessToken}
-        />
-
-        <DialogDeleteCategories
-          dataDelete={dataDelete}
-          handleOpenDelete={handleOpenDelete}
-          token={session?.accessToken}
-          openDelete={openDelete}
         />
       </div>
     </div>
   );
 }
 
-export default ListCategories;
+export default ListBook;

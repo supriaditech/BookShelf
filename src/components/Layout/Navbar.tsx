@@ -56,13 +56,13 @@ const Navbar = ({ session, locale }: NavbarProps) => {
                 </Link>
               </li>
               <li>
-                <Link href="/about" className="hover:underline">
-                  About
+                <Link href="/categories" className="hover:underline">
+                  Categories
                 </Link>
               </li>
               <li>
-                <Link href="/contact" className="hover:underline">
-                  Contact
+                <Link href="/book" className="hover:underline">
+                  Book
                 </Link>
               </li>
             </ul>

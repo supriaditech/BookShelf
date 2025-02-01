@@ -8,8 +8,7 @@ import {
   useEffect,
   ReactNode,
 } from 'react';
-import { Slide, ToastContainer } from 'react-toastify';
-import { PagesProgressBar as ProgressBar } from 'next-nprogress-bar';
+import { ToastContainer } from 'react-toastify';
 import { SessionProvider } from 'next-auth/react';
 import { Session } from 'next-auth';
 

@@ -1,6 +1,7 @@
 import MasterLayout from '@/components/Layout/MasterLayout';
 import FormLogin from '@/components/Login/FormLogin';
 import ImageLogin from '@/components/Login/ImageLogin';
+import { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 
 type Props = {
@@ -8,10 +9,14 @@ type Props = {
 };
 
 export async function generateMetadata({
-  params: { locale },
-}: Omit<any, 'children'>) {
-  const t = await getTranslations({ locale, namespace: 'BookShelf' });
-
+  params,
+}: {
+  params: { locale: string };
+}): Promise<Metadata> {
+  const t = await getTranslations({
+    locale: params.locale,
+    namespace: 'BookShelf',
+  });
   return {
     title: t('Login'),
   };
