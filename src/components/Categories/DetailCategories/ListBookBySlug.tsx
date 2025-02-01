@@ -5,6 +5,9 @@ import { Button, Input, Spinner } from '@material-tailwind/react';
 import React, { useState } from 'react';
 import { LoadingImage } from '@/components/LazyLoading/LoadingImage';
 import { useTranslations } from 'next-intl';
+import { useTheme } from '@/context/ThemeContext';
+import useBook from '@/hooks/useBook';
+import { useRouter } from '@/i18n/routing';
 
 interface Props {
   session: SessionType;
@@ -16,6 +19,9 @@ function ListBookBySlug({ session, slug }: Props) {
     session.accessToken,
     slug,
   );
+  const router = useRouter();
+  const { loading, handleStatusBook } = useBook(session.accessToken);
+  const { theme } = useTheme();
   const t = useTranslations();
   const [searchTerm, setSearchTerm] = useState('');
   // State untuk paginasi
@@ -39,6 +45,11 @@ function ListBookBySlug({ session, slug }: Props) {
       book.author.toLowerCase().includes(lowerCaseSearchTerm) // Pencarian berdasarkan penulis
     );
   });
+
+  const handleViewDetails = async (slug: number) => {
+    await handleStatusBook(session.accessToken, slug, 'IN_PROGRESS');
+    router.push(`/book/${slug}`);
+  };
   return (
     <div>
       {isLoadingDataBook ? (
@@ -90,6 +101,38 @@ function ListBookBySlug({ session, slug }: Props) {
                 <p className="text-sm text-gray-500">
                   {t('ISBN')}: {book.isbn}
                 </p>
+                <p
+                  className={`px-2 py-1 w-full mb-1 rounded-md  text-center  ${
+                    book.UserBookStatus?.length === 0
+                      ? 'bg-gray-800'
+                      : book.UserBookStatus?.[0]?.status === 'COMPLETED'
+                      ? 'bg-green-400'
+                      : 'bg-blue-500'
+                  } text-white`}
+                >
+                  Status :{' '}
+                  {book.UserBookStatus?.length === 0
+                    ? 'Belum dibaca'
+                    : book.UserBookStatus?.[0]?.status === 'COMPLETED'
+                    ? 'Selesai'
+                    : 'Sedang Dibaca'}
+                </p>
+                <div
+                  className={`flex w-full flex-row gap-2 items-center  border-2 ${
+                    theme == 'dark'
+                      ? 'bg-white text-black'
+                      : 'bg-black text-white'
+                  }bg-transparent  text-center p-2 justify-center rounded-md`}
+                  onClick={() => handleViewDetails(book.id)}
+                >
+                  <p
+                    className={`cursor-pointer ${
+                      theme === 'dark' ? 'text-black' : 'text-white'
+                    }  text-center`}
+                  >
+                    {t('Lihat buku')}
+                  </p>
+                </div>
               </div>
             ))}
           </div>

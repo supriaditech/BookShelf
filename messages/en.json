@@ -8,7 +8,8 @@
     "Login": "Login - BookShelf",
     "Categories": "Categories - BookShelf",
     "Details Categories": "Details Categories - BookShelf",
-    "Book": "Book - BookShelf"
+    "Book": "Book - BookShelf",
+    "Detail Book": "Detail Book - BookShelf"
   },
   "LogoImageAlt": "Logo Image",
   "RegisterTitle": "Register",
@@ -40,7 +41,6 @@
   "totalBooks": "Total Books",
   "currentlyReading": "Currently Reading",
   "finishedReading": "Finished Reading",
-  "count": "Total: {count}",
   "categories": "Categories",
   "viewAll": "View All",
   "errorLoadingCategories": "Error loading categories: ",
@@ -100,5 +100,6 @@
   "ID Book": "ID Book",
   "Book": "Book",
   "Search by title or author": "Search by title or author...",
-  "loadingBook": "Loading Book"
+  "loadingBook": "Loading Book",
+  "count": "Count"
 }

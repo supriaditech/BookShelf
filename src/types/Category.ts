@@ -1,10 +1,4 @@
-export interface Book {
-  id: number;
-  title: string;
-  author: string;
-  isbn: string;
-  coverImage: string;
-}
+import { Book } from './BookType';
 
 export interface Category {
   id: number;

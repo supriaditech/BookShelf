@@ -8,7 +8,8 @@
     "Login": "Masuk - BookShelf",
     "Categories": "Categori - BookShelf",
     "Details Categories": "Detail Kategori - BookShelf",
-    "Book": "Buku - BookShelf"
+    "Book": "Buku - BookShelf",
+    "Detail Book": "Detail Buku - BookShelf"
   },
   "LogoImageAlt": "Gambar Logo",
   "RegisterTitle": "Daftar",
@@ -40,7 +41,6 @@
   "totalBooks": "Total Buku",
   "currentlyReading": "Sedang Dibaca",
   "finishedReading": "Selesai Dibaca",
-  "count": "Jumlah: {count}",
   "categories": "Kategori",
   "viewAll": "Lihat Semua",
   "errorLoadingCategories": "Kesalahan saat memuat kategori: {error}",
@@ -100,5 +100,6 @@
   "ID Book": "ID Buku",
   "Book": "Buku",
   "Search by title or author": "Cari berdasarkan penulis atau judul buku...",
-  "loadingBook": "Sedang Memuat Buku"
+  "loadingBook": "Sedang Memuat Buku",
+  "count": "Total"
 }

@@ -25,7 +25,7 @@ export default async function handler(
 
       const book = await prisma.book.findUnique({
         where: { id: Number(id) },
-        include: { categories: true },
+        include: { categories: true, UserBookStatus: true },
       });
 
       if (!book) {

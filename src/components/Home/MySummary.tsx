@@ -1,14 +1,18 @@
 'use client';
 import { useTheme } from '@/context/ThemeContext';
+import useStatus from '@/hooks/useStatus';
+import { SessionType } from '@/types/SessionType';
 import { useTranslations } from 'next-intl';
 import React from 'react';
 import { BiSolidBookBookmark } from 'react-icons/bi';
 import { FaBook } from 'react-icons/fa';
 import { FaBookOpenReader } from 'react-icons/fa6';
 
-function MySummary() {
+function MySummary({ session }: { session: SessionType }) {
   const { theme, toggleTheme } = useTheme();
   const t = useTranslations();
+
+  const { dataStatus, error, isLoading } = useStatus(session?.accessToken);
   return (
     <div className="container sm:mx-auto mt-10 px-4">
       <p className="text-2xl font-bold">{t('MySummary')}</p>
@@ -24,7 +28,7 @@ function MySummary() {
           <div>
             <p className="text-sm sm:text-base">{t('totalBooks')}</p>
             <p className="font-bold text-base sm:text-lg">
-              {t('count', { count: 3 })}
+              {t('count')} {dataStatus?.data.totalBooks}
             </p>
           </div>
         </div>
@@ -39,7 +43,7 @@ function MySummary() {
           <div>
             <p className="text-sm sm:text-base">{t('currentlyReading')}</p>
             <p className="font-bold text-base sm:text-lg">
-              {t('count', { count: 3 })}
+              {t('count')} {dataStatus?.data.inProgressBooks}
             </p>
           </div>
         </div>
@@ -54,7 +58,7 @@ function MySummary() {
           <div>
             <p className="text-sm sm:text-base">{t('finishedReading')}</p>
             <p className="font-bold text-base sm:text-lg">
-              {t('count', { count: 3 })}
+              {t('count')} {dataStatus?.data.completedBooks}
             </p>
           </div>
         </div>

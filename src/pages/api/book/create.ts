@@ -128,7 +128,6 @@ export default async function handler(
             author: author as string,
             isbn: isbn as string,
             coverImage: coverImageUrl,
-            readingStatus: readingStatus as ReadingStatus,
             categories: {
               connect: categoryIds.map((id: string) => ({ id: parseInt(id) })),
             },
