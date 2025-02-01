@@ -14,7 +14,7 @@ function ImageRegister() {
       }`}
     >
       <LoadingImage
-        className="dark:invert w-80 h-auto aspect-auto"
+        className="dark:invert w-80 h-auto aspect-auto object-fit"
         src="/images/AssetRegister.png"
         alt="Register Image"
         width={180}

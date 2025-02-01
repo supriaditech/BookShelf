@@ -19,15 +19,14 @@ function FormRegister({ locale }: FormRegisterProps) {
   const { theme } = useTheme();
   const router = useRouter() as any;
 
-  const { handleRegister, handleSubmit, register, errors, nextUrl } =
-    useAuth(locale);
+  const { handleRegister, handleSubmit, register, errors } = useAuth(locale);
   const [showpassword, setShowPassword] = React.useState(false);
   const [showpasswordCurrent, setShowPasswordCurrent] = React.useState(false);
-  React.useEffect(() => {
-    if (nextUrl) {
-      router.replace(nextUrl);
-    }
-  }, [nextUrl]);
+  // React.useEffect(() => {
+  //   if (nextUrl) {
+  //     router.replace(nextUrl);
+  //   }
+  // }, [nextUrl]);
   return (
     <div
       className={`w-full h-full flex flex-col justify-center px-4 py-10 sm:p-20 ${

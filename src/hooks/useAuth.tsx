@@ -1,11 +1,12 @@
-// src/hooks/useAuth.ts
+'use client';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import Api from '../../service/api';
 import React from 'react';
 import { signIn, signOut } from 'next-auth/react';
 import { toast } from 'react-toastify';
-import { destroyCookie, parseCookies } from 'nookies';
-import { useRouter } from 'next/router';
+import { destroyCookie, parseCookies, setCookie } from 'nookies';
+import { useRouter } from '@/i18n/routing';
+
 interface AuthFormInputs {
   username: string;
   email: string;
@@ -23,7 +24,8 @@ const useAuth = (locale: string) => {
     setError, // Tambahkan setError untuk menangani error
   } = useForm<AuthFormInputs>();
   const [loadingLogin, setLoadingLogin] = React.useState<boolean>(false);
-  const [nextUrl, setNextUrl] = React.useState<string | any>(null);
+  const router = useRouter();
+
   const handleRegister: SubmitHandler<AuthFormInputs> = async (data) => {
     const id = toast.loading('Registering your account...');
     // Validasi untuk memastikan passwordCurrent sama dengan password
@@ -85,7 +87,7 @@ const useAuth = (locale: string) => {
         redirect: false,
         email: data.email,
         password: data.password,
-        callbackUrl: process.env.NEXT_PUBLIC_BASE_URL || '/',
+        callbackUrl: process.env.NEXT_PUBLIC_BASE_URL || '/', // Gantilah ke URL yang sesuai
       });
 
       if (!signInResponse) {
@@ -93,18 +95,17 @@ const useAuth = (locale: string) => {
         throw new Error('No response from server');
       }
 
-      // Cek apakah login berhasil
       if (signInResponse.ok && signInResponse.status === 200) {
         const cookies = parseCookies();
-        let nextUrl = `/${locale}`; // Set default nextUrl dengan locale
+        let nextUrl = `/`;
 
         if (cookies.nextSession) {
           const nextSessionObj = JSON.parse(cookies.nextSession);
+          console.log(nextSessionObj);
           nextUrl = nextSessionObj.url;
           destroyCookie(null, 'nextSession');
         } else {
           const raw = window.localStorage.getItem('nextSession') ?? '';
-
           if (raw !== '' && raw !== undefined && raw !== null) {
             const stored = JSON.parse(raw);
             if (stored) {
@@ -115,13 +116,27 @@ const useAuth = (locale: string) => {
           }
         }
 
-        // Pastikan nextUrl mengandung locale
-        if (!nextUrl.startsWith(`/${locale}`)) {
-          nextUrl = `${nextUrl}${locale}`; // Tambahkan locale jika belum ada
+        console.log('Final nextUrl:', nextUrl);
+
+        toast.success('Login successful!', { autoClose: 3000 });
+
+        // Menetapkan cookie hanya jika di production dan menambahkan SameSite=None
+        if (process.env.NODE_ENV === 'production') {
+          setCookie(null, 'nextSession', JSON.stringify({ url: nextUrl }), {
+            maxAge: 30 * 24 * 60 * 60, // Cookie berlaku selama 30 hari
+            path: '/',
+            secure: true, // Hanya aktifkan `secure` di production (HTTPS)
+            sameSite: 'None', // Pastikan untuk menambah SameSite=None di production
+          });
+        } else {
+          // Di development, cukup simpan cookie tanpa atribut `SameSite` dan `secure`
+          setCookie(null, 'nextSession', JSON.stringify({ url: nextUrl }), {
+            maxAge: 30 * 24 * 60 * 60,
+            path: '/',
+          });
         }
 
-        setNextUrl(nextUrl);
-        toast.success('Login successful!', { autoClose: 3000 });
+        router.replace(nextUrl);
       } else {
         console.error('Login failed:', signInResponse.error);
         throw new Error(signInResponse.error || 'Login failed');
@@ -193,7 +208,6 @@ const useAuth = (locale: string) => {
     register,
     handlerLogin,
     errors,
-    nextUrl,
     loadingLogin,
     handleLogout,
   };

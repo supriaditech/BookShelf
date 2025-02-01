@@ -1,12 +1,13 @@
-import { AuthOptions } from 'next-auth';
+import { NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
-import { signOut } from 'next-auth/react';
+import { verify } from 'jsonwebtoken';
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+const JWT_SECRET = process.env.JWT_SECRET || 'projectBokk'; // Ganti dengan secret yang aman
 
-const authOptions: AuthOptions = {
+export const authOptions: NextAuthOptions = {
   session: {
-    strategy: 'jwt',
+    strategy: 'jwt', // Menyimpan session menggunakan JWT
   },
   providers: [
     CredentialsProvider({
@@ -28,6 +29,7 @@ const authOptions: AuthOptions = {
               password: password,
             }),
           });
+
           const user = await response.json();
 
           if (response.ok && user.meta.statusCode === 200) {
@@ -44,7 +46,6 @@ const authOptions: AuthOptions = {
               refreshToken: user.data.refreshToken,
             };
           } else {
-            // Jika login gagal, kembalikan null
             console.error('Login failed:', user);
             return null;
           }
@@ -55,7 +56,8 @@ const authOptions: AuthOptions = {
       },
     }),
   ],
-  secret: process.env.JWT_SECRET || 'projectBokk',
+
+  secret: JWT_SECRET,
 
   callbacks: {
     async jwt({ token, user }: any) {
@@ -74,45 +76,48 @@ const authOptions: AuthOptions = {
         };
       }
       console.log('data token', token);
-      const expirationDate = new Date(token.expiresIn).getTime(); // Konversi ke timestamp
-      const currentTime = Date.now(); // Waktu saat ini dalam milidetik
 
-      console.log('token expired', expirationDate);
-      console.log('current time', currentTime);
+      // Check if token is expired
+      const expirationDate = new Date(token.expiresIn).getTime();
+      const currentTime = Date.now();
 
-      if (
-        (token.expiresIn && currentTime >= expirationDate) ||
-        token.accessToken === undefined
-      ) {
+      if (currentTime >= expirationDate || !token.accessToken) {
         console.log('Token expired, attempting to refresh token');
 
-        // Panggil endpoint refresh token
         const response = await fetch(`${apiUrl}/api/auth/refresh-token`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ refreshToken: token.refreshToken }), // Kirim refresh token
+          body: JSON.stringify({ refreshToken: token.refreshToken }),
         });
 
         if (response.ok) {
           const data = await response.json();
-          console.log('respone data refresh token ', data);
-          token.accessToken = data.accessToken; // Perbarui access token
-          token.expiresIn = new Date(Date.now() + 3600 * 1000).toISOString(); // Set waktu kedaluwarsa baru (1 jam dari sekarang)
+          console.log('response data refresh token ', data);
+          token.accessToken = data.accessToken;
+          token.expiresIn = new Date(Date.now() + 86400 * 1000).toISOString();
         } else {
           console.log('Failed to refresh token');
-          return null; // Kembalikan null jika refresh gagal
+          return null;
         }
       }
-      console.log('respone after refres data token ', token);
+      console.log('token after refresh', token);
       return token;
     },
 
     async session({ session, token }: any) {
       console.log('token blok session ', token);
       session.accessToken = token.accessToken;
-      console.log('token.accessToken', token.accessToken);
+      session.user = {
+        id: token.id,
+        email: token.email,
+        name: token.name,
+        createdAt: token.createdAt,
+        updatedAt: token.updatedAt,
+      };
+
+      // Fetch user profile
       try {
         const response = await fetch(apiUrl + '/api/user/profile', {
           method: 'POST',
@@ -128,23 +133,13 @@ const authOptions: AuthOptions = {
 
         const resp = await response.json();
         if (resp.meta.statusCode !== 200) {
-          if (typeof window !== 'undefined') {
-            session = null;
-          }
+          session = null;
         } else {
-          session.accessToken = token.accessToken;
-          session.user = {
-            id: token.id,
-            email: token.email,
-            name: token.name,
-            createdAt: token.createdAt,
-            updatedAt: token.updatedAt,
-          };
-
           session.user = resp.data;
         }
       } catch (e) {
-        return null;
+        console.error('Error fetching profile:', e);
+        session = null;
       }
 
       return session;
