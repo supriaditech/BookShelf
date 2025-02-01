@@ -1,5 +1,5 @@
 'use client';
-import { BookResponse } from '@/types/BookType';
+import { BookResponse, BookResponseByID } from '@/types/BookType';
 import Api from '../../service/api';
 import useSWR from 'swr';
 import React, { useState, useEffect } from 'react';
@@ -25,7 +25,7 @@ const fetcher = async <T,>(url: string, token: string): Promise<T> => {
   return (await api.call()) as T;
 };
 
-const useBook = (token: string) => {
+const useBook = (token: string, slug?: string) => {
   const [open, setOpen] = React.useState(false);
   const [preview, setPreview] = React.useState<string | null>(null);
   const [loading, setLoading] = React.useState<boolean>(false);
@@ -71,6 +71,44 @@ const useBook = (token: string) => {
     ['/api/book/get/get-all', token],
     ([url, token]: [string, string]) => fetcher(url, token),
   );
+  // get By ID
+  const {
+    data: dataBookId,
+    error: errorDataBookId,
+    isLoading: isLoadingBookId,
+    mutate: mutateDataBook,
+  } = useSWR<BookResponseByID>(
+    slug ? [`/api/book/get/${slug}`, token] : null,
+    ([url, token]: [string, string]) => fetcher(url, token),
+  );
+
+  const handleStatusBook = async (
+    token: string,
+    idBook: any,
+    status: string,
+  ) => {
+    setLoading(true);
+    const api = new Api();
+    api.url = '/api/book-status/upsert';
+    api.auth = true;
+    api.token = token;
+
+    api.body = {
+      bookId: Number(idBook),
+      status: status,
+    };
+    const response = await api.call();
+    if (response.meta.statusCode === 200) {
+      setLoading(false);
+      mutateDataBook();
+      return { success: true };
+      // Reset form or lakukan tindakan lain setelah berhasil
+    } else {
+      setLoading(false);
+
+      return { success: false, message: response.meta.message };
+    }
+  };
 
   // handle create
   const handleCreateBook: SubmitHandler<FormInputs> = async (data) => {
@@ -80,7 +118,7 @@ const useBook = (token: string) => {
     formData.append('title', data.title);
     formData.append('author', data.author);
     formData.append('isbn', data.isbn);
-    formData.append('readingStatus', 'NOT_STARTED');
+    // formData.append('readingStatus', 'NOT_STARTED');
 
     data.categoryIds.forEach((id) => {
       formData.append('categoryIds', id.toString());
@@ -124,7 +162,6 @@ const useBook = (token: string) => {
     formData.append('title', data.title);
     formData.append('author', data.author);
     formData.append('isbn', data.isbn);
-    formData.append('readingStatus', 'NOT_STARTED');
     formData.append('id', data.id.toString());
 
     data.categoryIds.forEach((id) => {
@@ -201,6 +238,10 @@ const useBook = (token: string) => {
     handleOpenEdit,
     handleEditBook,
     handleDelete,
+    dataBookId,
+    errorDataBookId,
+    isLoadingBookId,
+    handleStatusBook,
   };
 };
 

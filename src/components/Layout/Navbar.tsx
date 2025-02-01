@@ -3,7 +3,6 @@ import { useTheme } from '@/context/ThemeContext';
 import { Link } from '@/i18n/routing';
 import LanguageSwitcher from './LocaleSwitcher';
 import useAuth from '@/hooks/useAuth';
-import Image from 'next/image';
 import { GiHamburgerMenu } from 'react-icons/gi';
 import { MdNightlight, MdOutlineNightlight } from 'react-icons/md';
 

@@ -22,7 +22,7 @@ export default async function handler(
       // Mengambil semua kategori dari database
       const decoded = verify(token, JWT_SECRET);
       const book = await prisma.book.findMany({
-        include: { categories: true },
+        include: { categories: true, UserBookStatus: true },
       });
       return res
         .status(StatusCodes.OK)

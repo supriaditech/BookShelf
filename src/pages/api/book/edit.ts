@@ -180,7 +180,6 @@ export default async function handler(
         existingBook.title === title &&
         existingBook.author === author &&
         existingBook.isbn === isbn &&
-        existingBook.readingStatus === readingStatus &&
         existingBook.categories
           .map((c) => c.id.toString())
           .sort()
@@ -201,7 +200,6 @@ export default async function handler(
           title,
           author,
           isbn,
-          readingStatus: readingStatus as ReadingStatus,
           coverImage: coverImageUrl || existingBook.coverImage,
           categories: {
             set: validCategories.map((cat) => ({ id: cat.id })),

@@ -35,9 +35,11 @@ export default async function Home({ params: { locale } }: Props) {
     <MasterLayout locale={locale}>
       <div className="w-full">
         <CarouselScreen className="w-full overflow-hidden" />
-        <MySummary />
         {session ? ( // Memeriksa apakah session tidak null
-          <CategoryComponent session={session} />
+          <>
+            <MySummary session={session} />
+            <CategoryComponent session={session} />
+          </>
         ) : (
           <p>Please log in to see categories.</p> // Pesan jika session null
         )}

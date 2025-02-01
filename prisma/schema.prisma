@@ -11,13 +11,14 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  username  String   @unique
-  name      String
-  email     String   @unique
-  password  String
-  create_At DateTime @default(now())
-  update_At DateTime @updatedAt
+  id             Int              @id @default(autoincrement())
+  username       String           @unique
+  name           String
+  email          String           @unique
+  password       String
+  create_At      DateTime         @default(now())
+  update_At      DateTime         @updatedAt
+  UserBookStatus UserBookStatus[]
 }
 
 model Category {
@@ -35,9 +36,20 @@ model Book {
   author         String
   isbn           String           @unique
   coverImage     String?
-  readingStatus  ReadingStatus
   categories     Category[]       @relation("BookToCategory")
   BookToCategory BookToCategory[]
+  UserBookStatus UserBookStatus[]
+}
+
+model UserBookStatus {
+  id     Int           @id @default(autoincrement())
+  user   User          @relation(fields: [userId], references: [id])
+  userId Int
+  book   Book          @relation(fields: [bookId], references: [id])
+  bookId Int
+  status ReadingStatus
+
+  @@unique([userId, bookId])
 }
 
 enum ReadingStatus {

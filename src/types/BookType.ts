@@ -1,5 +1,7 @@
 // types/Book.ts
 
+import { UserBookStatusData } from './StatusType';
+
 export interface Meta {
   message: string;
   statusCode: number;
@@ -19,9 +21,14 @@ export interface Book {
   coverImage: string;
   readingStatus: 'IN_PROGRESS' | 'COMPLETED' | 'NOT_STARTED';
   categories: CategoryType[];
+  UserBookStatus: UserBookStatusData[];
 }
 
 export interface BookResponse {
   meta: Meta;
   data: Book[];
+}
+export interface BookResponseByID {
+  meta: Meta;
+  data: Book;
 }

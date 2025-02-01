@@ -1,8 +1,8 @@
 'use client';
 import { useCategories } from '@/hooks/useCategories';
 import { SessionType } from '@/types/SessionType';
-import { Button, Spinner } from '@material-tailwind/react';
-import React from 'react';
+import { Button, Input, Spinner } from '@material-tailwind/react';
+import React, { useState } from 'react';
 import { LoadingImage } from '../LazyLoading/LoadingImage';
 import { MdAddCircleOutline } from 'react-icons/md';
 import { FiEdit3 } from 'react-icons/fi';
@@ -29,6 +29,8 @@ function ListBook({ session }: { session: SessionType }) {
     handleOpen,
     openEdit,
     handleOpenEdit,
+    loading,
+    handleStatusBook,
   } = useBook(session.accessToken);
   const t = useTranslations();
   const router = useRouter();
@@ -36,6 +38,7 @@ function ListBook({ session }: { session: SessionType }) {
   const [dataEdit, setDataEdit] = React.useState();
   const [dataDelete, setDataDelete] = React.useState();
   const { theme } = useTheme();
+  const [searchTerm, setSearchTerm] = React.useState('');
   const totalPages = Math.ceil(
     (listDataBook?.data?.length || 0) / ITEMS_PER_PAGE,
   );
@@ -55,23 +58,45 @@ function ListBook({ session }: { session: SessionType }) {
     handleOpenDelete();
   };
 
-  const handleViewDetails = (slug: string) => {
-    router.push(`/categories/${slug}`);
+  const handleViewDetails = async (slug: number) => {
+    await handleStatusBook(session.accessToken, slug, 'IN_PROGRESS');
+    router.push(`/book/${slug}`);
   };
+
+  const filteredBooks = currentDataBook?.filter((book) => {
+    const lowerCaseSearchTerm = searchTerm.toLowerCase();
+    return (
+      book.title.toLowerCase().includes(lowerCaseSearchTerm) || // Pencarian berdasarkan judul
+      book.author.toLowerCase().includes(lowerCaseSearchTerm) // Pencarian berdasarkan penulis
+    );
+  });
   return (
     <div>
-      <div className="flex flex-row justify-between items-center  px-8 sm:px-0">
+      <div className="sm:flex flex-row justify-between items-center  px-8 sm:px-0">
         <p className="text-base sm:text-xl font-bold ">
           {t('List Book')} ({listDataBook?.data?.length || 0})
         </p>
-        <Button
-          size="sm"
-          className="flex flex-row gap-2 items-center bg-green-500 -mr-2 sm:mr-0"
-          onClick={handleOpen}
-        >
-          <MdAddCircleOutline className="w-6 h-6" />
-          <p className="text-sm sm:text-base">{t('Tambah buku')}</p>
-        </Button>
+        <div className="flex flex-row gap-2 justify-center items-center">
+          <div className=" ">
+            <Input
+              crossOrigin={undefined}
+              type="text"
+              label={t('Search by title or author')}
+              placeholder={t('Search by title or author')}
+              className="w-fullh-full sm:w-80"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
+          <Button
+            size="sm"
+            className="flex flex-row gap-2 items-center bg-green-500 -mr-2 sm:mr-0"
+            onClick={handleOpen}
+          >
+            <MdAddCircleOutline className="w-6 h-6" />
+            <p className="text-sm sm:text-base">{t('Tambah buku')}</p>
+          </Button>
+        </div>
       </div>
       <div className="mt-4 overflow-x-auto">
         {error && (
@@ -87,9 +112,9 @@ function ListBook({ session }: { session: SessionType }) {
           </div>
         ) : (
           <>
-            {currentDataBook && currentDataBook.length > 0 ? (
+            {filteredBooks && filteredBooks.length > 0 ? (
               <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 px-8 sm:px-4 lg::px-0 gap-6 p-4">
-                {currentDataBook.map((book) => (
+                {filteredBooks.map((book) => (
                   <li
                     key={book.id}
                     className="relative border p-4 rounded shadow flex-none w-full "
@@ -127,7 +152,22 @@ function ListBook({ session }: { session: SessionType }) {
                       </div>
                     </div>
                     <div className="flex my-1 flex-row justify-between items-center">
-                      <p className="font-bold">Status :</p>
+                      <p
+                        className={`px-2 py-1 w-60 rounded-md  text-center  ${
+                          book.UserBookStatus?.length === 0
+                            ? 'bg-gray-800'
+                            : book.UserBookStatus?.[0]?.status === 'COMPLETED'
+                            ? 'bg-green-400'
+                            : 'bg-blue-500'
+                        } text-white`}
+                      >
+                        Status :{' '}
+                        {book.UserBookStatus?.length === 0
+                          ? 'Belum dibaca'
+                          : book.UserBookStatus?.[0]?.status === 'COMPLETED'
+                          ? 'Selesai'
+                          : 'Sedang Dibaca'}
+                      </p>
                       <div
                         className=" px-2 py-1  flex flex-row gap-2 items-center  border-2 border-blue-500 bg-transparent text-sm text-blue-500 rounded-md"
                         onClick={() => handleEditClick(book)}
@@ -142,7 +182,7 @@ function ListBook({ session }: { session: SessionType }) {
                           ? 'bg-white text-black'
                           : 'bg-black text-white'
                       }bg-transparent  text-center p-2 justify-center rounded-md`}
-                      onClick={() => handleViewDetails(book.author)}
+                      onClick={() => handleViewDetails(book.id)}
                     >
                       <p
                         className={`cursor-pointer ${
