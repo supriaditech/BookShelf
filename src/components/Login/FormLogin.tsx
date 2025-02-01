@@ -8,6 +8,7 @@ import { useTheme } from '@/context/ThemeContext';
 import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa';
 import useAuth from '@/hooks/useAuth';
 import { Link, useRouter } from '@/i18n/routing';
+import { LoadingImage } from '../LazyLoading/LoadingImage';
 
 type FormLoginProps = {
   locale: string; // Menerima locale sebagai props
@@ -38,12 +39,12 @@ function FormLogin({ locale }: FormLoginProps) {
         theme === 'dark' ? 'bg-toscaSoft' : 'bg-white'
       }`}
     >
-      <Image
+      <LoadingImage
         src="/images/logo/logo.png" // Ensure this path is correct
         width={128} // Set to the actual width of the image
         height={100} // Set to the actual height of the image
         className="w-24 sm:w-32  h-auto" // Use h-auto to maintain aspect ratio
-        alt={t('LogoImageAlt')} // Translate the alt text
+        alt={t('LogoImageAlt')}
       />
       <h1 className="text-3xl sm:text-5xl font-bold text-gray-800 mb-10">
         {t('Login')}

@@ -38,7 +38,6 @@ function ListCategories({ session }: { session: SessionType }) {
     (listCategories?.data?.length || 0) / ITEMS_PER_PAGE,
   );
 
-  console.log('listCategories', listCategories);
   // Menghitung kategori yang akan ditampilkan pada halaman saat ini
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const endIndex = startIndex + ITEMS_PER_PAGE;

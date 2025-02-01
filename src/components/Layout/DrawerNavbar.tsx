@@ -1,15 +1,14 @@
 import React from 'react';
 import { Drawer, IconButton, Typography } from '@material-tailwind/react';
 import { GoHomeFill } from 'react-icons/go';
-import { BsFillQuestionDiamondFill } from 'react-icons/bs';
 import { FaUser } from 'react-icons/fa';
 import { Link } from '@/i18n/routing';
 import { useTheme } from '@/context/ThemeContext';
 import { MdNightlight, MdOutlineNightlight } from 'react-icons/md';
 import { useTranslations } from 'next-intl';
-
+import { BiSolidCategoryAlt } from 'react-icons/bi';
+import { RiBook2Fill } from 'react-icons/ri';
 interface DrawerNavbar {
-  type: string;
   open: boolean;
   openDrawer: () => void;
   closeDrawer: () => void;
@@ -19,9 +18,7 @@ interface DrawerNavbar {
 
 function DrawerNavbar({
   session,
-  type,
   open,
-  openDrawer,
   closeDrawer,
   handleLogout,
 }: DrawerNavbar) {
@@ -43,6 +40,30 @@ function DrawerNavbar({
     },
     {
       id: 2,
+      name: t('Categories'), // Use translation function
+      slug: 'categories',
+      icon: (
+        <BiSolidCategoryAlt
+          className={`w-6 h-6 ${
+            theme === 'dark' ? 'text-white' : 'text-gray-600'
+          } font-light`}
+        />
+      ),
+    },
+    {
+      id: 3,
+      name: t('Book'), // Use translation function
+      slug: 'book',
+      icon: (
+        <RiBook2Fill
+          className={`w-6 h-6 ${
+            theme === 'dark' ? 'text-white' : 'text-gray-600'
+          } font-light`}
+        />
+      ),
+    },
+    {
+      id: 4,
       name: t('profile'), // Use translation function
       slug: 'profile',
       icon: (
@@ -53,23 +74,11 @@ function DrawerNavbar({
         />
       ),
     },
-    {
-      id: 3,
-      name: t('aboutTab'), // Use translation function
-      slug: 'about',
-      icon: (
-        <BsFillQuestionDiamondFill
-          className={`w-6 h-6 ${
-            theme === 'dark' ? 'text-white' : 'text-gray-600'
-          } font-light`}
-        />
-      ),
-    },
   ];
 
   return (
     <React.Fragment>
-      {open && <div className={`fixed inset-0 bg-black opacity-50 z-40`} />}
+      {open && <div className={`fixed inset-0 bg-black opacity-50 z-10`} />}
       <Drawer
         open={open}
         onClose={closeDrawer}
