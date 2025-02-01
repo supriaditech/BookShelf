@@ -4,13 +4,19 @@ import MySummary from '@/components/Home/MySummary';
 import MasterLayout from '@/components/Layout/MasterLayout';
 import authOptions from '@/lib/auth';
 import { SessionType } from '@/types/SessionType';
+import { Metadata } from 'next';
 import { getServerSession } from 'next-auth';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 
 export async function generateMetadata({
-  params: { locale },
-}: Omit<any, 'children'>) {
-  const t = await getTranslations({ locale, namespace: 'BookShelf' });
+  params,
+}: {
+  params: { locale: string };
+}): Promise<Metadata> {
+  const t = await getTranslations({
+    locale: params.locale,
+    namespace: 'BookShelf',
+  });
 
   return {
     title: t('Home'),

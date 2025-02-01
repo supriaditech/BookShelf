@@ -69,7 +69,7 @@ const DialogCategories: React.FC<Props> = ({ handleOpen, open, token }) => {
             onChange={handleFileChange} // Menambahkan event handler
           />
           {errors.photo && (
-            <p className="text-red-500">{t('Photo is required.')}</p>
+            <p className="text-red-500">{t('Photo is required')}.</p>
           )}
 
           {/* Menampilkan preview gambar jika ada */}

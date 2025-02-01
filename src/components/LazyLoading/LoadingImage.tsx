@@ -44,6 +44,7 @@ export const LoadingImage = ({
           className={`object-cover w-full h-full transition-transform duration-300 transform ${imageClassName}`}
           onLoad={handleLoad}
           unoptimized={true}
+          priority
         />
       </div>
     </div>

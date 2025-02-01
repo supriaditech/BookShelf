@@ -2,7 +2,7 @@
 import useSWR from 'swr';
 import { toast } from 'react-toastify';
 import Api from '../../service/api';
-import { CategoryResponse } from '@/types/Category';
+import { CategoryResponse, CategorySingleResponse } from '@/types/Category';
 import React from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
@@ -21,19 +21,16 @@ const generateSlug = (name: string): string => {
     .trim();
 };
 
-const fetcher = async (
-  url: string,
-  token: string,
-): Promise<CategoryResponse> => {
+// Di dalam hook useCategories
+const fetcher = async <T,>(url: string, token: string): Promise<T> => {
   const api = new Api();
   api.url = url;
   api.auth = true;
   api.type = 'json';
   api.token = token;
-  return await api.call();
+  return (await api.call()) as T;
 };
-
-export const useCategories = (token: string) => {
+export const useCategories = (token: string, slug?: string) => {
   const [open, setOpen] = React.useState(false);
   const [openEdit, setOpenEdit] = React.useState(false);
   const [openDelete, setOpenDelete] = React.useState(false);
@@ -79,7 +76,17 @@ export const useCategories = (token: string) => {
     mutate,
   } = useSWR<CategoryResponse>(
     ['/api/categories/get/all', token],
-    ([url, token]: [string, string]) => fetcher(url, token), // Menentukan tipe argumen
+    ([url, token]: [string, string]) => fetcher(url, token),
+  );
+
+  const {
+    data: dataBookCategory,
+    error: errorDataBook,
+    isLoading: isLoadingDataBook,
+    mutate: mutateDataBook,
+  } = useSWR<CategorySingleResponse>(
+    slug ? [`/api/categories/get/slug/${slug}`, token] : null,
+    ([url, token]: [string, string]) => fetcher(url, token),
   );
 
   const handleCreateCategories: SubmitHandler<FormInputs> = async (data) => {
@@ -184,6 +191,7 @@ export const useCategories = (token: string) => {
       return { success: false, message: response.meta.message };
     }
   };
+
   return {
     listCategories,
     error,
@@ -209,5 +217,8 @@ export const useCategories = (token: string) => {
     handleOpenDelete,
     openDelete,
     handleDelete,
+    dataBookCategory: dataBookCategory?.data,
+    errorDataBook,
+    isLoadingDataBook,
   };
 };

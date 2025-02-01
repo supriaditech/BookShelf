@@ -1,6 +1,7 @@
 import MasterLayout from '@/components/Layout/MasterLayout';
 import FormRegister from '@/components/Register/FormRegister';
 import ImageRegister from '@/components/Register/ImageRegister';
+import { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import React from 'react';
 
@@ -9,9 +10,14 @@ type Props = {
 };
 
 export async function generateMetadata({
-  params: { locale },
-}: Omit<any, 'children'>) {
-  const t = await getTranslations({ locale, namespace: 'BookShelf' });
+  params,
+}: {
+  params: { locale: string };
+}): Promise<Metadata> {
+  const t = await getTranslations({
+    locale: params.locale,
+    namespace: 'BookShelf',
+  });
 
   return {
     title: t('Register'),
