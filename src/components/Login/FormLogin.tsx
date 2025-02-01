@@ -18,19 +18,13 @@ function FormLogin({ locale }: FormLoginProps) {
   const t = useTranslations();
   const { theme } = useTheme();
   const router = useRouter();
-  const {
-    handlerLogin,
-    handleSubmit,
-    register,
-    errors,
-    nextUrl,
-    loadingLogin,
-  } = useAuth(locale ?? 'en');
-  React.useEffect(() => {
-    if (nextUrl) {
-      router.replace(nextUrl);
-    }
-  }, [nextUrl]);
+  const { handlerLogin, handleSubmit, register, errors, loadingLogin } =
+    useAuth(locale ?? 'en');
+  // React.useEffect(() => {
+  //   if (nextUrl) {
+  //     router.replace(nextUrl);
+  //   }
+  // }, [nextUrl]);
 
   const [showpassword, setShowPassword] = React.useState(false);
   return (
