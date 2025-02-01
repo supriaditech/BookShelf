@@ -1,0 +1,17 @@
+[0;1;32m●[0m nginx.service - A high performance web server and a reverse proxy server
+     Loaded: loaded (/lib/systemd/system/nginx.service; enabled; vendor preset: enabled)
+     Active: [0;1;32mactive (running)[0m since Sat 2025-02-01 14:23:46 UTC; 4min 12s ago
+       Docs: man:nginx(8)
+    Process: 30250 ExecStartPre=/usr/sbin/nginx -t -q -g daemon on; master_process on; (code=exited, status=0/SUCCESS)
+    Process: 30251 ExecStart=/usr/sbin/nginx -g daemon on; master_process on; (code=exited, status=0/SUCCESS)
+   Main PID: 30346 (nginx)
+      Tasks: 3 (limit: 2928)
+     Memory: 9.3M
+        CPU: 27ms
+     CGroup: /system.slice/nginx.service
+             ├─30346 "nginx: master process /usr/sbin/nginx -g daemon on; master_process on;"
+             ├─30349 "nginx: worker process" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" ""
+             └─30350 "nginx: worker process" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" ""
+
+Feb 01 14:23:46 fb3db6c374.bytevirt.com systemd[1]: Starting A high performance web server and a reverse proxy server...
+Feb 01 14:23:46 fb3db6c374.bytevirt.com systemd[1]: Started A high performance web server and a reverse proxy server.
