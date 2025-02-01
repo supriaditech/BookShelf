@@ -40,14 +40,14 @@ const Navbar = ({ session, locale }: NavbarProps) => {
               src="/images/logo/logo.png"
               width={120}
               height={20}
-              className="w-28 sm:w-40 h-auto object-fit"
+              className="w-28 sm:w-40 h-auto aspect-auto"
               alt="Logo"
             />
           </Link>
         </div>
 
         {/* desktop */}
-        <div className="hidden md:flex flex-row justify-between items-center  w-full ">
+        <div className="hidden lg:flex flex-row justify-between items-center  w-full ">
           {session ? (
             <ul className="flex space-x-20 w-full justify-center">
               <li>
@@ -173,7 +173,7 @@ const Navbar = ({ session, locale }: NavbarProps) => {
         </div>
 
         {/* mobile */}
-        <div className="flex flex-row gap-1 items-center sm:hidden">
+        <div className="flex flex-row gap-1 items-center lg:hidden">
           <LanguageSwitcher />
           {session != null ? (
             <div
