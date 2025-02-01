@@ -14,6 +14,7 @@ import useBook from '@/hooks/useBook';
 import { CategoryType } from '@/types/BookType';
 import DialogCreateBook from './DialogBook/DialogCreateBook';
 import DialogEditBook from './DialogBook/DialogEditBook';
+import DialogDeleteBook from './DialogBook/DialogDeleteBook';
 
 const ITEMS_PER_PAGE = 6;
 
@@ -55,20 +56,21 @@ function ListBook({ session }: { session: SessionType }) {
   };
 
   const handleViewDetails = (slug: string) => {
-    router.push(`/categories/${slug}`); // Navigate to the dynamic route
+    router.push(`/categories/${slug}`);
   };
   return (
     <div>
-      <div className="flex flex-row justify-between items-center overflow-scroll px-8 sm:px-0">
-        <p className="text-lg sm:text-2xl font-bold ">
+      <div className="flex flex-row justify-between items-center  px-8 sm:px-0">
+        <p className="text-base sm:text-xl font-bold ">
           {t('List Book')} ({listDataBook?.data?.length || 0})
         </p>
         <Button
+          size="sm"
           className="flex flex-row gap-2 items-center bg-green-500 -mr-2 sm:mr-0"
           onClick={handleOpen}
         >
           <MdAddCircleOutline className="w-6 h-6" />
-          <p>{t('Tambah buku')}</p>
+          <p className="text-sm sm:text-base">{t('Tambah buku')}</p>
         </Button>
       </div>
       <div className="mt-4 overflow-x-auto">
@@ -90,7 +92,7 @@ function ListBook({ session }: { session: SessionType }) {
                 {currentDataBook.map((book) => (
                   <li
                     key={book.id}
-                    className="relative border p-4 rounded shadow flex-none w-full " // Setel lebar kategori
+                    className="relative border p-4 rounded shadow flex-none w-full "
                   >
                     <div className="grid grid-cols-4 gap-2 ">
                       <LoadingImage
@@ -201,12 +203,23 @@ function ListBook({ session }: { session: SessionType }) {
           />
         )}
 
-        <DialogEditBook
-          dataEdit={dataEdit}
-          handleOpenEdit={handleOpenEdit}
-          openEdit={openEdit}
-          token={session?.accessToken}
-        />
+        {dataEdit && (
+          <DialogEditBook
+            dataEdit={dataEdit}
+            handleOpenEdit={handleOpenEdit}
+            openEdit={openEdit}
+            token={session?.accessToken}
+          />
+        )}
+
+        {dataDelete && (
+          <DialogDeleteBook
+            dataDelete={dataDelete}
+            handleOpenDelete={handleOpenDelete}
+            token={session?.accessToken}
+            openDelete={openDelete}
+          />
+        )}
       </div>
     </div>
   );
