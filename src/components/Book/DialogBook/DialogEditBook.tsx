@@ -36,7 +36,7 @@ const DialogEditBook: React.FC<Props> = ({
     errors,
     handleEditBook,
     handleFileChange,
-    loading,
+    isLoading,
   } = useBook(token);
   const [showCategories, setShowCategories] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
@@ -51,26 +51,37 @@ const DialogEditBook: React.FC<Props> = ({
   );
   React.useEffect(() => {
     if (openEdit && dataEdit) {
+      // Reset form fields dengan dataEdit
       reset({
         title: dataEdit.title,
         author: dataEdit.author,
         isbn: dataEdit.isbn,
-        categoryIds: dataEdit.categoryIds,
+        categoryIds: dataEdit.categories.map((category: any) => category.id), // Set categoryIds
       });
-      setPreview(dataEdit.coverImage); // Set preview dengan URL gambar yang ada
+
+      setSelectedCategories(
+        dataEdit.categories.map((category: any) => category.id),
+      );
+      setSelectedCategoryNames(
+        dataEdit.categories.map((category: any) => category.name),
+      );
+
+      // Set preview gambar jika ada
+      setPreview(dataEdit.coverImage);
     }
   }, [openEdit, dataEdit, reset]);
 
   const onSubmit = async (data: any) => {
+    data.categoryIds = selectedCategories;
     setValue('id', dataEdit.id);
     await handleEditBook(data);
-    handleOpenEdit(); // Menutup dialog setelah berhasil
+    handleOpenEdit();
     reset();
     setPreview(null);
   };
 
   const idBook =
-    t('ID Book ') + dataEdit !== null || dataEdit !== undefined
+    t('ID Book') + dataEdit !== null || dataEdit !== undefined
       ? dataEdit?.id
       : '-';
 
@@ -105,7 +116,7 @@ const DialogEditBook: React.FC<Props> = ({
   };
   return (
     <Dialog open={openEdit} handler={handleOpenEdit}>
-      <DialogBody className="max-h-[1000px] overflow-y-auto">
+      <DialogBody className="max-h-[800px] md:max-h-[700px] lg:max-h-[800px] overflow-y-auto">
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
           <Input
             crossOrigin={undefined}
@@ -234,7 +245,7 @@ const DialogEditBook: React.FC<Props> = ({
               color="green"
               className="flex flex-row justify-center items-center gap-2"
             >
-              {loading && <Spinner className="h-4 w-4" />}
+              {isLoading && <Spinner className="h-4 w-4" />}
               {t('Submit')}
             </Button>
             <Button color="red" onClick={handleClose}>

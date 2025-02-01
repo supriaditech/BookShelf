@@ -2,6 +2,7 @@
 import { useTheme } from '@/context/ThemeContext';
 import Image from 'next/image';
 import React from 'react';
+import { LoadingImage } from '../LazyLoading/LoadingImage';
 
 function ImageRegister() {
   const { theme } = useTheme();
@@ -12,13 +13,12 @@ function ImageRegister() {
         theme === 'dark' ? 'bg-white' : 'bg-toscaSoft'
       }`}
     >
-      <Image
+      <LoadingImage
         className="dark:invert w-80 h-auto aspect-auto"
         src="/images/AssetRegister.png"
         alt="Register Image"
         width={180}
         height={38}
-        priority
       />
     </div>
   );

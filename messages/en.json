@@ -96,5 +96,9 @@
   "Lihat buku": "Book Detail",
   "List Book": "List Book",
   "Tambah buku": "Add Book",
-  "Categories": "Categories"
+  "Categories": "Categories",
+  "ID Book": "ID Book",
+  "Book": "Book",
+  "Search by title or author": "Search by title or author...",
+  "loadingBook": "Loading Book"
 }

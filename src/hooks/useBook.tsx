@@ -2,7 +2,7 @@
 import { BookResponse } from '@/types/BookType';
 import Api from '../../service/api';
 import useSWR from 'swr';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
@@ -24,6 +24,7 @@ const fetcher = async <T,>(url: string, token: string): Promise<T> => {
   api.token = token;
   return (await api.call()) as T;
 };
+
 const useBook = (token: string) => {
   const [open, setOpen] = React.useState(false);
   const [preview, setPreview] = React.useState<string | null>(null);
@@ -60,7 +61,7 @@ const useBook = (token: string) => {
     setOpenEdit(!openEdit);
   };
 
-  //   get list book
+  // get list book
   const {
     data: listDataBook,
     error,
@@ -71,31 +72,21 @@ const useBook = (token: string) => {
     ([url, token]: [string, string]) => fetcher(url, token),
   );
 
-  //   create
+  // handle create
   const handleCreateBook: SubmitHandler<FormInputs> = async (data) => {
     setLoading(true);
     const formData = new FormData();
 
-    // Append text fields
     formData.append('title', data.title);
     formData.append('author', data.author);
     formData.append('isbn', data.isbn);
     formData.append('readingStatus', 'NOT_STARTED');
 
-    // Append category IDs as an array
     data.categoryIds.forEach((id) => {
-      formData.append('categoryIds', id.toString()); // Ensure IDs are strings
+      formData.append('categoryIds', id.toString());
     });
 
-    // Append the cover image file
     if (data.coverImage && data.coverImage.length > 0) {
-      formData.append('coverImage', data.coverImage[0]); // Assuming coverImage is a FileList
-    }
-
-    // Log the form data for debugging
-    console.log('Form Data:', formData);
-    if (data.coverImage.length > 0) {
-      formData.append('coverImage', data.coverImage[0]); // Append the first file in the FileList
     } else {
       setError('coverImage', {
         type: 'required',
@@ -113,64 +104,78 @@ const useBook = (token: string) => {
     api.body = formData;
 
     const response = await api.call();
-    console.log(response);
     if (response.meta.statusCode === 200) {
       toast.success('Book created successfully!');
       setOpen(false);
-      mutate(); // Refresh the book list
-      reset(); // Reset the form
+      mutate();
+      reset();
       setLoading(false);
-      return { success: true };
     } else {
       setLoading(false);
       toast.error(response.meta.message || 'Failed to create book');
-      return { success: false, message: error.message };
     }
   };
 
+  // handle edit
   const handleEditBook: SubmitHandler<FormInputs> = async (data) => {
     setLoading(true);
     const formData = new FormData();
 
-    // Append text fields
     formData.append('title', data.title);
     formData.append('author', data.author);
     formData.append('isbn', data.isbn);
-    formData.append('readingStatus', data.readingStatus);
+    formData.append('readingStatus', 'NOT_STARTED');
+    formData.append('id', data.id.toString());
 
-    // Append category IDs as an array
     data.categoryIds.forEach((id) => {
-      formData.append('categoryIds', id.toString()); // Ensure IDs are strings
+      formData.append('categoryIds', id.toString());
     });
 
-    // Append the cover image file if it's selected
     if (data.coverImage && data.coverImage.length > 0) {
-      formData.append('coverImage', data.coverImage[0]); // Assuming coverImage is a FileList
+      formData.append('coverImage', data.coverImage[0]);
     }
 
-    // Append the book ID for the update
-    formData.append('id', data.id.toString()); // Assuming the book ID is a number
-
     const api = new Api();
-    api.url = '/api/book/edit'; // URL for the edit API
+    api.url = '/api/book/edit';
     api.auth = true;
     api.token = token;
-    api.type = 'multipart'; // Send data as multipart
+    api.type = 'multipart';
     api.body = formData;
 
     const response = await api.call();
-    console.log(response);
 
     if (response.meta.statusCode === 200) {
       toast.success('Book updated successfully!');
       setOpenEdit(false);
-      mutate(); // Refresh the book list
-      reset(); // Reset the form
+      mutate();
+      reset();
+      setLoading(false);
+    } else {
+      setLoading(false);
+      toast.error(response.meta.message || 'Failed to update book');
+    }
+  };
+
+  // handle delete
+  const handleDelete = async (id: number) => {
+    setLoading(true);
+    const api = new Api();
+    api.url = '/api/book/delete';
+    api.auth = true;
+    api.token = token;
+    api.type = 'json';
+    api.body = { id: id };
+    const response = await api.call();
+
+    if (response.meta.statusCode === 200) {
+      toast.success('Book delete successfully!');
+      reset(); // Reset form setelah berhasil
+      mutate();
       setLoading(false);
       return { success: true };
     } else {
       setLoading(false);
-      toast.error(response.meta.message || 'Failed to update book');
+      toast.error(response.meta.message || 'Failed to delete Book');
       return { success: false, message: response.meta.message };
     }
   };
@@ -195,6 +200,7 @@ const useBook = (token: string) => {
     openEdit,
     handleOpenEdit,
     handleEditBook,
+    handleDelete,
   };
 };
 

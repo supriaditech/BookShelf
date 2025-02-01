@@ -43,15 +43,6 @@ const DialogCreateBook: React.FC<Props> = ({ handleOpen, open, token }) => {
   const [searchTerm, setSearchTerm] = useState('');
 
   const onSubmit = async (data: any) => {
-    console.log('=========================');
-    console.log('Form Data:', {
-      title: data.title,
-      author: data.author,
-      isbn: data.isbn,
-      readingStatus: 'NOT_STARTED', // This is set manually
-      coverImage: data.coverImage, // This will be a FileList
-      categoryIds: selectedCategories, // The selected category IDs
-    });
     data.categoryIds = selectedCategories;
     setValue('readingStatus', 'NOT_STARTED');
     await handleCreateBook(data);

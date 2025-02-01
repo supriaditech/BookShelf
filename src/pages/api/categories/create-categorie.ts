@@ -33,10 +33,8 @@ export default async function handler(
     }
 
     try {
-      console.log('Token yang diterima:', token);
       // Verifikasi token
-      const decoded = verify(token, JWT_SECRET);
-      console.log('Token terverifikasi:', decoded); // Log hasil verifikasi
+      verify(token, JWT_SECRET);
 
       const form = new IncomingForm({
         uploadDir: UPLOAD_DIR,
@@ -53,8 +51,6 @@ export default async function handler(
           });
         },
       );
-
-      console.log('Files yang diterima:', files);
 
       // Validasi input
       const name = Array.isArray(fields.name) ? fields.name[0] : fields.name;

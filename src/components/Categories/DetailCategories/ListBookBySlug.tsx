@@ -1,13 +1,10 @@
 'use client';
 import { useCategories } from '@/hooks/useCategories';
 import { SessionType } from '@/types/SessionType';
-import { Button, Spinner } from '@material-tailwind/react';
+import { Button, Input, Spinner } from '@material-tailwind/react';
 import React, { useState } from 'react';
-import { MdAddCircleOutline } from 'react-icons/md';
-import { FiEdit3 } from 'react-icons/fi';
 import { LoadingImage } from '@/components/LazyLoading/LoadingImage';
 import { useTranslations } from 'next-intl';
-import { useTheme } from '@/context/ThemeContext';
 
 interface Props {
   session: SessionType;
@@ -20,8 +17,7 @@ function ListBookBySlug({ session, slug }: Props) {
     slug,
   );
   const t = useTranslations();
-  const { theme } = useTheme();
-
+  const [searchTerm, setSearchTerm] = useState('');
   // State untuk paginasi
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5; // Jumlah buku per halaman
@@ -35,11 +31,22 @@ function ListBookBySlug({ session, slug }: Props) {
   const currentBooks =
     dataBookCategory?.books?.slice(startIndex, startIndex + itemsPerPage) || [];
 
+  // Filter buku berdasarkan pencarian (judul dan penulis)
+  const filteredBooks = currentBooks.filter((book) => {
+    const lowerCaseSearchTerm = searchTerm.toLowerCase();
+    return (
+      book.title.toLowerCase().includes(lowerCaseSearchTerm) || // Pencarian berdasarkan judul
+      book.author.toLowerCase().includes(lowerCaseSearchTerm) // Pencarian berdasarkan penulis
+    );
+  });
   return (
     <div>
       {isLoadingDataBook ? (
-        <div className="flex justify-center items-center">
-          <Spinner className="w-12 h-12 text-blue-500" />
+        <div className="flex flex-row gap-2 justify-center items-center">
+          <div>
+            <Spinner className="w-12 h-12 text-blue-500" />
+          </div>
+          <p className="text-xl font-bold">{t('loadingBook')}</p>
         </div>
       ) : errorDataBook ? (
         <div className="text-red-500 text-center">
@@ -47,9 +54,25 @@ function ListBookBySlug({ session, slug }: Props) {
         </div>
       ) : (
         <div>
-          <h1 className="text-2xl font-bold">{dataBookCategory?.name}</h1>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
-            {currentBooks.map((book) => (
+          <div className="sm:flex flex-cols justify-between items-center">
+            <h1 className="text-md sm:text-2xl  px-4 sm:px-0 font-bold">
+              {dataBookCategory?.name}
+            </h1>
+            {/* Input Pencarian */}
+            <div className="mt-4 px-4 sm:px-0">
+              <Input
+                crossOrigin={undefined}
+                type="text"
+                label={t('Search by title or author')}
+                placeholder={t('Search by title or author')}
+                className="w-full sm:w-80"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </div>
+          </div>
+          <div className="grid grid-cols-1 px-4 sm:px-0 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
+            {filteredBooks.map((book) => (
               <div key={book.id} className="border p-4 rounded shadow">
                 <LoadingImage
                   src={book.coverImage}
@@ -58,7 +81,9 @@ function ListBookBySlug({ session, slug }: Props) {
                   width={500}
                   height={200}
                 />
-                <h2 className="text-lg font-semibold mt-2">{book.title}</h2>
+                <h2 className="text-md sm:text-lg font-semibold mt-2">
+                  {book.title}
+                </h2>
                 <p className="text-sm text-gray-500">
                   {t('Author')}: {book.author}
                 </p>

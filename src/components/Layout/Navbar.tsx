@@ -12,6 +12,7 @@ import React from 'react';
 import DrawerNavbar from './DrawerNavbar';
 import { Typography } from '@material-tailwind/react';
 import { FaUser } from 'react-icons/fa';
+import { LoadingImage } from '../LazyLoading/LoadingImage';
 interface NavbarProps {
   session: any;
   locale: string;
@@ -36,11 +37,11 @@ const Navbar = ({ session, locale }: NavbarProps) => {
       <div className="container mx-auto flex justify-between items-center">
         <div className="text-lg font-bold">
           <Link href="/">
-            <Image
+            <LoadingImage
               src="/images/logo/logo.png"
               width={120}
               height={20}
-              className="w-28 sm:w-40 h-auto "
+              className="w-28 sm:w-40 h-auto object-fit"
               alt="Logo"
             />
           </Link>
@@ -198,14 +199,15 @@ const Navbar = ({ session, locale }: NavbarProps) => {
               {theme === 'light' ? <MdOutlineNightlight /> : <MdNightlight />}
             </button>
           )}
-          <DrawerNavbar
-            session={session}
-            type="mobile"
-            open={open}
-            openDrawer={openDrawer}
-            closeDrawer={closeDrawer}
-            handleLogout={handleLogout}
-          />
+          {open && (
+            <DrawerNavbar
+              session={session}
+              open={open}
+              openDrawer={openDrawer}
+              closeDrawer={closeDrawer}
+              handleLogout={handleLogout}
+            />
+          )}
         </div>
       </div>
     </nav>
