@@ -44,7 +44,6 @@ const DialogCreateBook: React.FC<Props> = ({ handleOpen, open, token }) => {
 
   const onSubmit = async (data: any) => {
     data.categoryIds = selectedCategories;
-    setValue('readingStatus', 'NOT_STARTED');
     await handleCreateBook(data);
     handleOpen();
     reset();
