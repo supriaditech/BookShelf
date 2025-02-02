@@ -3,7 +3,7 @@ import jwt, { JwtPayload } from 'jsonwebtoken';
 import { createResponse } from '@/utils/response'; // Pastikan path ini sesuai dengan struktur proyek Anda
 import { StatusCodes } from 'http-status-codes';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'projectBokk';
+const JWT_SECRET = process.env.JWT_SECRET || 'projectBOOKshelf543345';
 
 if (!JWT_SECRET) {
   throw new Error('JWT_SECRET is not defined in the environment variables.');

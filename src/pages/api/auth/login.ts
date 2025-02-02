@@ -6,7 +6,7 @@ import prisma from '@/lib/prisma';
 import { createResponse } from '@/utils/response';
 import { StatusCodes } from 'http-status-codes';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'projectBokk'; // Ganti dengan secret yang aman
+const JWT_SECRET = process.env.JWT_SECRET || 'projectBOOKshelf543345'; // Ganti dengan secret yang aman
 
 export default async function handler(
   req: NextApiRequest,
@@ -14,7 +14,7 @@ export default async function handler(
 ) {
   if (req.method === 'POST') {
     const { email, password } = req.body;
-
+    console.log('JWT_SECRET login', JWT_SECRET);
     // Validasi input
     if (!email || !password) {
       return res

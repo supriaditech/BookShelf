@@ -3,11 +3,11 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 import { verify } from 'jsonwebtoken';
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-const JWT_SECRET = process.env.JWT_SECRET || 'projectBokk'; // Ganti dengan secret yang aman
-
+const JWT_SECRET = process.env.JWT_SECRET || 'projectBOOKshelf543345'; // Ganti dengan secret yang aman
+console.log('JWT_SECRET===================', JWT_SECRET);
 export const authOptions: NextAuthOptions = {
   session: {
-    strategy: 'jwt', // Menyimpan session menggunakan JWT
+    strategy: 'jwt',
   },
   providers: [
     CredentialsProvider({
@@ -44,6 +44,7 @@ export const authOptions: NextAuthOptions = {
               accessToken: user.data.accessToken,
               expiresIn: user.data.expiresIn,
               refreshToken: user.data.refreshToken,
+              exp: user.expiresIn,
             };
           } else {
             console.error('Login failed:', user);
@@ -73,6 +74,7 @@ export const authOptions: NextAuthOptions = {
           name: user.name,
           createdAt: user.createdAt,
           updatedAt: user.updatedAt,
+          exp: user.expiresIn,
         };
       }
       console.log('data token', token);
