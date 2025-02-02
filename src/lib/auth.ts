@@ -1,6 +1,7 @@
 import { NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { verify } from 'jsonwebtoken';
+import { signOut } from 'next-auth/react';
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 const JWT_SECRET = process.env.JWT_SECRET || 'projectBOOKshelf543345'; // Ganti dengan secret yang aman
@@ -8,6 +9,7 @@ console.log('JWT_SECRET===================', JWT_SECRET);
 export const authOptions: NextAuthOptions = {
   session: {
     strategy: 'jwt',
+    // maxAge: 30 * 24 * 60 * 60,
   },
   providers: [
     CredentialsProvider({
@@ -79,32 +81,32 @@ export const authOptions: NextAuthOptions = {
       }
       console.log('data token', token);
 
-      // Check if token is expired
-      const expirationDate = new Date(token.expiresIn).getTime();
-      const currentTime = Date.now();
+      // // Check if token is expired
+      // const expirationDate = new Date(token.expiresIn).getTime();
+      // const currentTime = Date.now();
 
-      if (currentTime >= expirationDate || !token.accessToken) {
-        console.log('Token expired, attempting to refresh token');
+      // if (currentTime >= expirationDate || !token.accessToken) {
+      //   console.log('Token expired, attempting to refresh token');
 
-        const response = await fetch(`${apiUrl}/api/auth/refresh-token`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ refreshToken: token.refreshToken }),
-        });
+      //   const response = await fetch(`${apiUrl}/api/auth/refresh-token`, {
+      //     method: 'POST',
+      //     headers: {
+      //       'Content-Type': 'application/json',
+      //     },
+      //     body: JSON.stringify({ refreshToken: token.refreshToken }),
+      //   });
 
-        if (response.ok) {
-          const data = await response.json();
-          console.log('response data refresh token ', data);
-          token.accessToken = data.accessToken;
-          token.expiresIn = new Date(Date.now() + 86400 * 1000).toISOString();
-        } else {
-          console.log('Failed to refresh token');
-          return null;
-        }
-      }
-      console.log('token after refresh', token);
+      //   if (response.ok) {
+      //     const data = await response.json();
+      //     console.log('response data refresh token ', data);
+      //     token.accessToken = data.accessToken;
+      //     const expiresIn = Math.floor(Date.now() / 1000) + 86400; // 1 hari (dalam detik)
+      //   } else {
+      //     console.log('Failed to refresh token');
+      //     return null;
+      //   }
+      // }
+      // console.log('token after refresh', token);
       return token;
     },
 
@@ -135,7 +137,8 @@ export const authOptions: NextAuthOptions = {
 
         const resp = await response.json();
         if (resp.meta.statusCode !== 200) {
-          session = null;
+          signOut();
+          return;
         } else {
           session.user = resp.data;
         }
