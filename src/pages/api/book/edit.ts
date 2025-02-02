@@ -7,9 +7,8 @@ import path from 'path';
 import { IncomingForm } from 'formidable';
 import { v4 as uuidv4 } from 'uuid';
 import { promises as fs } from 'fs';
-import { ReadingStatus } from '@prisma/client';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'projectBokk';
+const JWT_SECRET = process.env.JWT_SECRET || 'projectBOOKshelf543345';
 const UPLOAD_DIR = path.join(process.cwd(), 'public/uploads/books');
 
 export const config = {

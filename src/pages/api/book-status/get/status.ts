@@ -4,7 +4,7 @@ import { verify } from 'jsonwebtoken';
 import { StatusCodes } from 'http-status-codes';
 import { createResponse } from '@/utils/response';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'projectBokk'; // Ganti dengan secret yang aman
+const JWT_SECRET = process.env.JWT_SECRET || 'projectBOOKshelf543345'; // Ganti dengan secret yang aman
 
 export default async function handler(
   req: NextApiRequest,

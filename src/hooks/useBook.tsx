@@ -10,7 +10,6 @@ interface FormInputs {
   title: string;
   author: string;
   isbn: string;
-  readingStatus: string;
   coverImage: FileList;
   id: number;
   categoryIds: number[];
@@ -125,12 +124,12 @@ const useBook = (token: string, slug?: string) => {
     });
 
     if (data.coverImage && data.coverImage.length > 0) {
+      formData.append('coverImage', data.coverImage[0]); // Append the first file in the FileList
     } else {
       setError('coverImage', {
         type: 'required',
         message: 'Cover Image is required',
       });
-      setLoading(false);
       return;
     }
 

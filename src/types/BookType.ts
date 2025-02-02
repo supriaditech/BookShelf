@@ -19,7 +19,6 @@ export interface Book {
   author: string;
   isbn: string;
   coverImage: string;
-  readingStatus: 'IN_PROGRESS' | 'COMPLETED' | 'NOT_STARTED';
   categories: CategoryType[];
   UserBookStatus: UserBookStatusData[];
 }
