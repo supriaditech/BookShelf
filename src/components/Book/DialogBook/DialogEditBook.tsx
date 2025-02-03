@@ -11,6 +11,7 @@ import {
 } from '@material-tailwind/react';
 import useBook from '@/hooks/useBook';
 import { useCategories } from '@/hooks/useCategories';
+import { ToastContainer } from 'react-toastify';
 
 interface Props {
   openEdit: boolean;
@@ -253,6 +254,18 @@ const DialogEditBook: React.FC<Props> = ({
             </Button>
           </DialogFooter>
         </form>
+        <ToastContainer
+          className="absolute z-[99999] top-0 left-0"
+          position="top-center"
+          autoClose={5000}
+          hideProgressBar
+          newestOnTop
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
       </DialogBody>
     </Dialog>
   );

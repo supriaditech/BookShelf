@@ -10,6 +10,7 @@ import {
   Spinner,
 } from '@material-tailwind/react';
 import { useCategories } from '@/hooks/useCategories';
+import { ToastContainer } from 'react-toastify';
 
 interface Props {
   openEdit: boolean;
@@ -70,7 +71,7 @@ const DialogEditCategories: React.FC<Props> = ({
   return (
     <Dialog open={openEdit} handler={handleOpenEdit}>
       <DialogHeader>{t('Edit Categories')}</DialogHeader>
-      <DialogBody className="max-h-[1000px] overflow-y-auto">
+      <DialogBody className="max-h-[800px] overflow-y-auto">
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
           <Input
             crossOrigin={undefined}
@@ -123,6 +124,18 @@ const DialogEditCategories: React.FC<Props> = ({
             </Button>
           </DialogFooter>
         </form>
+        <ToastContainer
+          className="absolute z-[99999] top-0 left-0"
+          position="top-center"
+          autoClose={5000}
+          hideProgressBar
+          newestOnTop
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
       </DialogBody>
     </Dialog>
   );

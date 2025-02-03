@@ -6,6 +6,7 @@ import { LoadingImage } from '../LazyLoading/LoadingImage';
 import { SessionType } from '@/types/SessionType';
 import { Link } from '@/i18n/routing';
 import { Spinner } from '@material-tailwind/react';
+import { ApiUrl } from '../../../config/config';
 
 function CategoryComponent({ session }: { session: SessionType }) {
   const { listCategories, error, isLoading } = useCategories(
@@ -49,7 +50,9 @@ function CategoryComponent({ session }: { session: SessionType }) {
                     className="border p-4 rounded shadow flex-none w-full md:w-1/3"
                   >
                     <LoadingImage
-                      src={category.photo}
+                      src={`${ApiUrl}/api/files/get?filename=${encodeURIComponent(
+                        category.photo,
+                      )}`}
                       alt={category.name}
                       className="w-full h-32 object-cover rounded"
                       width={500}

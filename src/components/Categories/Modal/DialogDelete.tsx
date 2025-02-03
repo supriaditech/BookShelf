@@ -9,6 +9,7 @@ import {
   Spinner,
 } from '@material-tailwind/react';
 import { useCategories } from '@/hooks/useCategories';
+import { ToastContainer } from 'react-toastify';
 
 interface Props {
   openDelete: boolean;
@@ -57,6 +58,18 @@ const DialogDeleteCategories: React.FC<Props> = ({
             {t('Cancel')}
           </Button>
         </DialogFooter>
+        <ToastContainer
+          className="absolute z-[99999] top-0 left-0"
+          position="top-center"
+          autoClose={5000}
+          hideProgressBar
+          newestOnTop
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
       </DialogBody>
     </Dialog>
   );

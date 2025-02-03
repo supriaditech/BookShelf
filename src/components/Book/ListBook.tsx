@@ -15,6 +15,7 @@ import { CategoryType } from '@/types/BookType';
 import DialogCreateBook from './DialogBook/DialogCreateBook';
 import DialogEditBook from './DialogBook/DialogEditBook';
 import DialogDeleteBook from './DialogBook/DialogDeleteBook';
+import { ApiUrl } from '../../../config/config';
 
 const ITEMS_PER_PAGE = 6;
 
@@ -121,7 +122,9 @@ function ListBook({ session }: { session: SessionType }) {
                   >
                     <div className="grid grid-cols-4 gap-2 ">
                       <LoadingImage
-                        src={book.coverImage}
+                        src={`${ApiUrl}/api/files/get?filename=${encodeURIComponent(
+                          book.coverImage,
+                        )}`}
                         alt={book.title}
                         className=" col-span-1 w-full h-36 rounded-md object-cover "
                         width={500}

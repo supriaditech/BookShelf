@@ -99,7 +99,7 @@ export const ThemeProviderNext = ({
     <SessionProvider session={session}>
       <ThemeContext.Provider value={{ themeDrawer, theme, toggleTheme }}>
         <ToastContainer
-          className={'z-10'}
+          className="absolute z-[99999]"
           position="top-center"
           autoClose={5000}
           hideProgressBar

@@ -11,6 +11,7 @@ import {
 import useBook from '@/hooks/useBook';
 import { useTranslations } from 'use-intl';
 import { useCategories } from '@/hooks/useCategories';
+import { ToastContainer } from 'react-toastify';
 
 interface Props {
   open: boolean;
@@ -221,6 +222,18 @@ const DialogCreateBook: React.FC<Props> = ({ handleOpen, open, token }) => {
             </Button>
           </DialogFooter>
         </form>
+        <ToastContainer
+          className="absolute z-[99999] top-0 left-0"
+          position="top-center"
+          autoClose={5000}
+          hideProgressBar
+          newestOnTop
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
       </DialogBody>
     </Dialog>
   );

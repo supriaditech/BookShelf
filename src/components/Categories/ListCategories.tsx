@@ -59,7 +59,7 @@ function ListCategories({ session }: { session: SessionType }) {
   };
   return (
     <div>
-      <div className="flex flex-row justify-between items-center overflow-scroll px-8 sm:px-0">
+      <div className="flex flex-row justify-between items-center px-8 sm:px-0">
         <p className="text-lg sm:text-2xl font-bold ">
           {t('List Categories')} ({listCategories?.data?.length || 0})
         </p>
@@ -71,7 +71,7 @@ function ListCategories({ session }: { session: SessionType }) {
           <p>{t('Tambah Category')}</p>
         </Button>
       </div>
-      <div className="mt-4 overflow-x-auto">
+      <div className="mt-4">
         {error && (
           <div className="flex flex-col border border-gray-200 justify-center items-center gap-1 p-20">
             <p>Error loading categories: {error.message}</p>

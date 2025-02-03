@@ -8,6 +8,7 @@ import { useTranslations } from 'next-intl';
 import { useTheme } from '@/context/ThemeContext';
 import useBook from '@/hooks/useBook';
 import { useRouter } from '@/i18n/routing';
+import { ApiUrl } from '../../../../config/config';
 
 interface Props {
   session: SessionType;
@@ -86,7 +87,9 @@ function ListBookBySlug({ session, slug }: Props) {
             {filteredBooks.map((book) => (
               <div key={book.id} className="border p-4 rounded shadow">
                 <LoadingImage
-                  src={book.coverImage}
+                  src={`${ApiUrl}/api/files/get?filename=${encodeURIComponent(
+                    book.coverImage,
+                  )}`}
                   alt={book.title}
                   className="w-full h-32 object-cover rounded"
                   width={500}

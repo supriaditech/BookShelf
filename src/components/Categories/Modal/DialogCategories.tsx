@@ -11,6 +11,7 @@ import {
 } from '@material-tailwind/react';
 import { useTranslations } from 'next-intl';
 import { useCategories } from '@/hooks/useCategories';
+import { ToastContainer } from 'react-toastify';
 
 interface Props {
   open: boolean;
@@ -45,9 +46,9 @@ const DialogCategories: React.FC<Props> = ({ handleOpen, open, token }) => {
   };
 
   return (
-    <Dialog open={open} handler={handleClose}>
+    <Dialog open={open} handler={handleClose} className="relative z-[1]">
       <DialogHeader>{t('Tambah Categories')}</DialogHeader>
-      <DialogBody className="max-h-[1000px] overflow-y-auto">
+      <DialogBody className="max-h-[800px] overflow-y-auto">
         {/* Menambahkan kelas untuk scroll */}
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
           <Input
@@ -94,6 +95,18 @@ const DialogCategories: React.FC<Props> = ({ handleOpen, open, token }) => {
           </DialogFooter>
         </form>
       </DialogBody>
+      <ToastContainer
+        className="absolute z-[99999] top-0 left-0"
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar
+        newestOnTop
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </Dialog>
   );
 };

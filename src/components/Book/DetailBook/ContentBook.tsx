@@ -7,6 +7,7 @@ import { CategoryType } from '@/types/BookType';
 import { SessionType } from '@/types/SessionType';
 import { Spinner } from '@material-tailwind/react';
 import React from 'react';
+import { ApiUrl } from '../../../../config/config';
 
 interface Props {
   session: SessionType;
@@ -48,7 +49,9 @@ function ContentBook({ session, slug }: Props) {
           <div className="relative w-full h-64 mb-6 overflow-hidden rounded-lg">
             {dataBookId && (
               <LoadingImage
-                src={dataBookId?.data?.coverImage}
+                src={`${ApiUrl}/api/files/get?filename=${encodeURIComponent(
+                  dataBookId?.data?.coverImage,
+                )}`}
                 alt={dataBookId?.data.title}
                 className="object-cover w-full h-full"
                 width={500}

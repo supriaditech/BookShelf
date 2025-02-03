@@ -29,7 +29,7 @@ const Navbar = ({ session, locale }: NavbarProps) => {
   };
   return (
     <nav
-      className={`sticky top-0 z-10  p-4 ${
+      className={`sticky top-0 z-[999]  p-4 ${
         theme === 'dark' ? 'bg-gray-800' : 'bg-white'
       } text-${theme === 'dark' ? 'white' : 'black'} shadow`}
     >

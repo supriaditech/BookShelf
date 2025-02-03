@@ -9,6 +9,7 @@ import {
   Spinner,
 } from '@material-tailwind/react';
 import useBook from '@/hooks/useBook';
+import { ToastContainer } from 'react-toastify';
 
 interface Props {
   openDelete: boolean;
@@ -53,6 +54,18 @@ const DialogDeleteBook: React.FC<Props> = ({
           <Button color="red" onClick={handleOpenDelete}>
             {t('Cancel')}
           </Button>
+          <ToastContainer
+            className="absolute z-[99999] top-0 left-0"
+            position="top-center"
+            autoClose={5000}
+            hideProgressBar
+            newestOnTop
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+          />
         </DialogFooter>
       </DialogBody>
     </Dialog>
