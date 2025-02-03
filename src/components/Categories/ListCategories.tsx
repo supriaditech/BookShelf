@@ -13,6 +13,7 @@ import { useTheme } from '@/context/ThemeContext';
 import DialogDeleteCategories from './Modal/DialogDelete';
 import { useTranslations } from 'next-intl';
 import { useRouter } from '@/i18n/routing';
+import { ApiUrl } from '../../../config/config';
 
 const ITEMS_PER_PAGE = 6;
 
@@ -92,7 +93,9 @@ function ListCategories({ session }: { session: SessionType }) {
                     className="relative border p-4 rounded shadow flex-none w-full " // Setel lebar kategori
                   >
                     <LoadingImage
-                      src={category.photo}
+                      src={`${ApiUrl}/api/files/get?filename=${encodeURIComponent(
+                        category.photo,
+                      )}`}
                       alt={category.name}
                       className="w-full h-32 object-cover rounded"
                       width={500}
