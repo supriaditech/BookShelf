@@ -50,7 +50,10 @@ const useAuth = (locale: string) => {
 
     try {
       const response = await api.call();
-      if (response.meta.statusCode === 201) {
+      if (
+        response.meta.statusCode === 201 ||
+        response.meta.statusCode === 201
+      ) {
         toast.update(id, {
           render: (
             <p className="text-base font-bold">Your account registered.</p>
@@ -59,6 +62,7 @@ const useAuth = (locale: string) => {
           autoClose: 3000,
           isLoading: false,
         });
+        setLoadingLogin(false);
 
         setTimeout(async () => {
           toast.update(id, {
@@ -70,12 +74,22 @@ const useAuth = (locale: string) => {
           handlerLogin(data);
         });
       } else
-        toast.error(`Register failed ${response.meta.message}`, {
+        toast.update(id, {
+          render: (
+            <p className="text-base font-bold">
+              Register failed {response.meta.message}
+            </p>
+          ),
+          type: 'error',
           autoClose: 3000,
+          isLoading: false,
         });
-    } catch (error) {
-      toast.error(`Register failed ${error}`, {
+    } catch (error: any) {
+      toast.update(id, {
+        render: <p className="text-base font-bold">Register failed {error}</p>,
+        type: 'error',
         autoClose: 3000,
+        isLoading: false,
       });
     }
   };
