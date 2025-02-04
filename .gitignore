@@ -35,6 +35,6 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-/public/uploads/categories/
-/public/uploads/book/
+/public/uploads/categories/*
+/public/uploads/books/*
 /prisma/db.dev
