@@ -115,7 +115,6 @@ const useAuth = (locale: string) => {
 
         if (cookies.nextSession) {
           const nextSessionObj = JSON.parse(cookies.nextSession);
-          console.log(nextSessionObj);
           nextUrl = nextSessionObj.url;
           destroyCookie(null, 'nextSession');
         } else {
@@ -129,8 +128,6 @@ const useAuth = (locale: string) => {
             nextUrl = String(signInResponse.url);
           }
         }
-
-        console.log('Final nextUrl:', nextUrl);
 
         toast.success('Login successful!', { autoClose: 3000 });
 

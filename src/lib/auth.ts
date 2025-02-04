@@ -5,7 +5,6 @@ import { signOut } from 'next-auth/react';
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 const JWT_SECRET = process.env.JWT_SECRET || 'projectBOOKshelf543345'; // Ganti dengan secret yang aman
-console.log('JWT_SECRET===================', JWT_SECRET);
 export const authOptions: NextAuthOptions = {
   session: {
     strategy: 'jwt',
@@ -64,7 +63,6 @@ export const authOptions: NextAuthOptions = {
 
   callbacks: {
     async jwt({ token, user }: any) {
-      console.log('user', user);
       if (user) {
         token = {
           ...token,
@@ -79,7 +77,6 @@ export const authOptions: NextAuthOptions = {
           exp: user.expiresIn,
         };
       }
-      console.log('data token', token);
 
       // // Check if token is expired
       // const expirationDate = new Date(token.expiresIn).getTime();
@@ -111,7 +108,6 @@ export const authOptions: NextAuthOptions = {
     },
 
     async session({ session, token }: any) {
-      console.log('token blok session ', token);
       session.accessToken = token.accessToken;
       session.user = {
         id: token.id,

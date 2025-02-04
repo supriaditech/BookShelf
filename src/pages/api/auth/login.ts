@@ -14,7 +14,6 @@ export default async function handler(
 ) {
   if (req.method === 'POST') {
     const { email, password } = req.body;
-    console.log('JWT_SECRET login', JWT_SECRET);
     // Validasi input
     if (!email || !password) {
       return res
