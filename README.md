@@ -3,7 +3,7 @@
 
 #### Clone Project 
 
-```http
+```
   git clone https://github.com/supriaditech/BookShelf.git
 ```
 #### Installasi Pakage
@@ -13,30 +13,30 @@
 ```
 #### Jalankan Migrate Prisma ORM 
 
-```http
+```
   yarn prisma db push
 ```
 atau
-```http
+```
   yarn prisma migrate dev --name init
 
 ```
 #### Generate Prisma Client 
 
-```http
+```
   yarn prisma generate
 ```
 #### Cek Database dengan Prisma Studio
 
-```http
+```
   yarn prisma studio
 ```
 #### Jalankan Proyek
-```http
+```
   yarn dev
 ```
 #### Buka url di browser
-```http
+```
   http://localhost:3000/
 ```
 #
