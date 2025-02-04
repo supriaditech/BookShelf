@@ -8,7 +8,7 @@
 ```
 #### Installasi Pakage
 
-```http
+```
   yarn install
 ```
 #### Jalankan Migrate Prisma ORM 
