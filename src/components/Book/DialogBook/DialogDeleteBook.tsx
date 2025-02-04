@@ -39,7 +39,7 @@ const DialogDeleteBook: React.FC<Props> = ({
   return (
     <Dialog open={openDelete} handler={handleOpenDelete}>
       <DialogHeader>{t('Delete Categories')}</DialogHeader>
-      <DialogBody className="max-h-[1000px] overflow-y-auto">
+      <DialogBody className="max-h-[800px] overflow-y-auto">
         <p className="text-lg">{Message}</p>
         <DialogFooter>
           <Button
