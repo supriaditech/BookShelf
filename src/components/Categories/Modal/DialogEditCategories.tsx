@@ -11,6 +11,7 @@ import {
 } from '@material-tailwind/react';
 import { useCategories } from '@/hooks/useCategories';
 import { ToastContainer } from 'react-toastify';
+import { ApiUrl } from '../../../../config/config';
 
 interface Props {
   openEdit: boolean;
@@ -39,7 +40,6 @@ const DialogEditCategories: React.FC<Props> = ({
   } = useCategories(token);
 
   const t = useTranslations();
-
   // Mengatur nilai default saat dialog dibuka
   useEffect(() => {
     if (openEdit && dataEdit) {
@@ -106,7 +106,11 @@ const DialogEditCategories: React.FC<Props> = ({
           {/* Menampilkan preview gambar jika ada */}
           {preview && (
             <div className="mt-4">
-              <img src={preview} alt="Preview" className="w-full h-auto" />
+              <img
+                src={`${ApiUrl}${preview}`}
+                alt="Preview"
+                className="w-full h-auto"
+              />
             </div>
           )}
 

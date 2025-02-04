@@ -5,6 +5,7 @@ import Api from '../../service/api';
 import { CategoryResponse, CategorySingleResponse } from '@/types/Category';
 import React from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { ApiUrl } from '../../config/config';
 
 interface FormInputs {
   name: string;

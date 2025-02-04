@@ -12,8 +12,6 @@ export async function middleware(req: NextRequest, request: NextRequest) {
   const token = await getToken({ req, secret: process.env.JWT_SECRET });
   const { pathname } = req.nextUrl;
   const [, NEXT_LOCALE, ...segments] = pathname.split('/') || 'en'; // Ambil locale dari pathname
-  console.log('Detected request:', req);
-  console.log('Detected locale:', NEXT_LOCALE);
 
   let locale = NEXT_LOCALE ? NEXT_LOCALE : 'en';
 
@@ -22,9 +20,6 @@ export async function middleware(req: NextRequest, request: NextRequest) {
   if (token) {
     const expirationDate = new Date(Number(token.expiresIn)).getTime(); // Konversi ke timestamp
     const currentTime = Date.now(); // Waktu saat ini dalam milidetik
-
-    console.log('token expired', token.expiresIn);
-    console.log('current time', currentTime);
 
     // Jika token belum expired
     if (
@@ -41,7 +36,6 @@ export async function middleware(req: NextRequest, request: NextRequest) {
     isTokenExpired = true;
   }
 
-  console.log(isTokenExpired);
   // Jika tidak ada token, arahkan ke halaman login
   if (isTokenExpired) {
     if (pathname !== `/${locale}/login` && pathname !== `/${locale}/register`) {

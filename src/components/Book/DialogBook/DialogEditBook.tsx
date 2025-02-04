@@ -12,6 +12,7 @@ import {
 import useBook from '@/hooks/useBook';
 import { useCategories } from '@/hooks/useCategories';
 import { ToastContainer } from 'react-toastify';
+import { ApiUrl } from '../../../../config/config';
 
 interface Props {
   openEdit: boolean;
@@ -236,7 +237,11 @@ const DialogEditBook: React.FC<Props> = ({
           {/* Menampilkan preview gambar jika ada */}
           {preview && (
             <div className="mt-4">
-              <img src={preview} alt="Preview" className="w-full h-auto" />
+              <img
+                src={`${ApiUrl}${preview}`}
+                alt="Preview"
+                className="w-full h-auto"
+              />
             </div>
           )}
 
