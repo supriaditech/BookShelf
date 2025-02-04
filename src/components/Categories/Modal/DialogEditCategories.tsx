@@ -71,7 +71,7 @@ const DialogEditCategories: React.FC<Props> = ({
   return (
     <Dialog open={openEdit} handler={handleOpenEdit}>
       <DialogHeader>{t('Edit Categories')}</DialogHeader>
-      <DialogBody className="max-h-[800px] overflow-y-auto">
+      <DialogBody className="max-h-[700px] sm:max-h-[800px] md:max-h-[700px] lg:max-h-[800px] overflow-y-auto">
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
           <Input
             crossOrigin={undefined}
@@ -107,9 +107,15 @@ const DialogEditCategories: React.FC<Props> = ({
           {preview && (
             <div className="mt-4">
               <img
-                src={`${ApiUrl}${preview}`}
+                src={preview}
                 alt="Preview"
                 className="w-full h-auto"
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement; // Casting target ke HTMLImageElement
+                  target.src = `${ApiUrl}/api/files/get?filename=${encodeURIComponent(
+                    preview,
+                  )}`; // Ganti src dengan preview jika error
+                }}
               />
             </div>
           )}

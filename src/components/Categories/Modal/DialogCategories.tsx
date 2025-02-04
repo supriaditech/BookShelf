@@ -48,7 +48,7 @@ const DialogCategories: React.FC<Props> = ({ handleOpen, open, token }) => {
   return (
     <Dialog open={open} handler={handleClose} className="relative z-[1]">
       <DialogHeader>{t('Tambah Categories')}</DialogHeader>
-      <DialogBody className="max-h-[800px] overflow-y-auto">
+      <DialogBody className="max-h-[700px] sm:max-h-[800px] md:max-h-[700px] lg:max-h-[800px] overflow-y-auto">
         {/* Menambahkan kelas untuk scroll */}
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
           <Input

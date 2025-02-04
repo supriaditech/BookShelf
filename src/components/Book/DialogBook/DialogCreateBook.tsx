@@ -91,7 +91,7 @@ const DialogCreateBook: React.FC<Props> = ({ handleOpen, open, token }) => {
   return (
     <Dialog open={open} handler={handleClose}>
       <DialogHeader>{t('Tambah Buku')}</DialogHeader>
-      <DialogBody className="max-h-[800px] overflow-y-auto">
+      <DialogBody className="max-h-[700px] sm:max-h-[800px] md:max-h-[700px] lg:max-h-[800px] overflow-y-auto">
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
           <Input
             crossOrigin={undefined}
